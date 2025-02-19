@@ -16,6 +16,11 @@ export enum Team {
  * @returns
  */
 export function isTeam(creature1: Creature, creature2: Creature, team: Team) {
+	// Add null checks
+	if (!creature1 || !creature2) {
+		return false;
+	}
+
 	switch (team) {
 		case Team.Enemy:
 			return creature1.team % 2 !== creature2.team % 2;

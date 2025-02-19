@@ -1172,7 +1172,7 @@ export class Creature {
 			}
 		}
 
-		// @ts-expect-error 2554
+		// removed the ts-expect-error 2554 - not sure if the solve was local
 		game.onHeal(this, amount);
 	}
 
@@ -1272,7 +1272,7 @@ export class Creature {
 
 			// Trigger
 			if (!o.ignoreRetaliation) {
-				// @ts-expect-error 2554
+				// removed the ts-expect-error 2554 - not sure if the solve was local
 				game.onDamage(this, damage);
 			}
 

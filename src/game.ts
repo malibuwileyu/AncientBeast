@@ -27,6 +27,9 @@ import { GameConfig } from './script';
 import { Trap } from './utility/trap';
 import { Drop } from './drop';
 import { CreatureType, Realm, UnitData } from './data/types';
+import { MetricsManager } from './metrics/MetricsManager';
+import { StateCapture } from './metrics/StateCapture';
+import { ThreatAnalyticsManager } from './metrics/analysis/ThreatAnalyticsManager';
 
 /* eslint-disable prefer-rest-params */
 
@@ -149,6 +152,10 @@ export default class Game {
 
 	endGameSound?: any;
 
+	metricsManager: MetricsManager;
+	stateCapture: StateCapture;
+	threatAnalyticsManager: ThreatAnalyticsManager;
+
 	constructor() {
 		this.abilities = [];
 		this.players = [];
@@ -270,6 +277,10 @@ export default class Game {
 
 		const signalChannels = ['ui', 'metaPowers', 'creature', 'hex'];
 		this.signals = this.setupSignalChannels(signalChannels);
+
+		this.metricsManager = new MetricsManager();
+		this.stateCapture = new StateCapture(this);
+		this.threatAnalyticsManager = new ThreatAnalyticsManager(this);
 	}
 
 	loadUnitData(data: UnitData) {
@@ -462,6 +473,13 @@ export default class Game {
 	 * Launch the game with the given number of player.
 	 */
 	setup(playerMode: number) {
+		// Initialize metrics with a unique game ID using template literal
+		const gameId = `game_${Date.now()}`;
+		console.log('=========================');
+		console.log(`Game ID: ${gameId}`);
+		console.log('=========================');
+		this.metricsManager.initializeGame(gameId);
+
 		// Phaser
 		this.Phaser.scale.parentIsWindow = true;
 		this.Phaser.scale.pageAlignHorizontally = true;
@@ -592,6 +610,10 @@ export default class Game {
 		}
 
 		this.activeCreature = this.players[0].creatures[0]; // Prevent errors
+
+		// Now that game is fully initialized, capture initial state
+		const setupState = this.stateCapture.captureTurnState(0);
+		this.metricsManager.addTurnState(setupState);
 
 		{
 			const self = this;
@@ -748,6 +770,20 @@ export default class Game {
 	 * Replace the current queue with the next queue
 	 */
 	nextRound() {
+		// First, capture the last turn's state if there is an active creature
+		if (this.activeCreature && this.turn > 0) {
+			// Only capture turn state if we haven't already captured it in nextCreature
+			if (this.queue.isCurrentEmpty()) {
+				const turnState = this.stateCapture.captureTurnState(this.turn);
+				this.metricsManager.addTurnState(turnState);
+				console.log(`End of Turn State (Round ${this.turn}):`, turnState);
+			}
+			
+			// Now capture the round state
+			const roundState = this.stateCapture.captureRoundState(this.turn);
+			this.metricsManager.addRoundState(roundState);
+		}
+
 		this.turn++;
 		this.log(`Round ${this.turn}`, 'roundmarker', true);
 		this.onStartOfRound();
@@ -783,6 +819,15 @@ export default class Game {
 						differentPlayer = this.activeCreature.player != next.player;
 					} else {
 						differentPlayer = true;
+					}
+
+					// Only capture turn state if we're not at the end of a round
+					if (this.activeCreature && 
+						!(this.turn === 0 && this.activeCreature === this.players[0].creatures[0]) && 
+						!this.queue.isCurrentEmpty()) {
+						const turnState = this.stateCapture.captureTurnState(this.turn);
+						this.metricsManager.addTurnState(turnState);
+						console.log(`End of Turn State (Round ${this.turn}):`, turnState);
 					}
 
 					const last = this.activeCreature;
@@ -909,40 +954,40 @@ export default class Game {
 			o,
 		);
 
-		this.turnThrottle = true;
-		this.UI.btnSkipTurn.changeState('disabled');
-		this.UI.btnDelay.changeState('disabled');
-		this.UI.btnAudio.changeState('disabled');
+	this.turnThrottle = true;
+	this.UI.btnSkipTurn.changeState('disabled');
+	this.UI.btnDelay.changeState('disabled');
+	this.UI.btnAudio.changeState('disabled');
+
+	setTimeout(() => {
+		this.turnThrottle = false;
+		this.UI.btnSkipTurn.changeState('normal');
+
+		if (this.activeCreature?.canWait && this.queue.queue.length > 1) {
+			this.UI.btnDelay.changeState('normal');
+		}
+
+		o.callback.apply();
+	}, 1000);
+
+	if (this.activeCreature) {
+		this.activeCreature.facePlayerDefault();
+
+		const skipTurn = new Date();
+		const p = this.activeCreature.player;
+		p.totalTimePool = p.totalTimePool - (skipTurn.valueOf() - p.startTime.valueOf());
+		this.pauseTime = 0;
+		this.activeCreature.deactivate('turn-end');
+		const activeCreature = this.activeCreature;
+		this.nextCreature();
 
 		setTimeout(() => {
-			this.turnThrottle = false;
-			this.UI.btnSkipTurn.changeState('normal');
-
-			if (this.activeCreature?.canWait && this.queue.queue.length > 1) {
-				this.UI.btnDelay.changeState('normal');
+			if (!o.noTooltip) {
+				activeCreature.hint(o.tooltip, 'msg_effects');
 			}
-
-			o.callback.apply();
-		}, 1000);
-
-		if (this.activeCreature) {
-			this.activeCreature.facePlayerDefault();
-
-			const skipTurn = new Date();
-			const p = this.activeCreature.player;
-			p.totalTimePool = p.totalTimePool - (skipTurn.valueOf() - p.startTime.valueOf());
-			this.pauseTime = 0;
-			this.activeCreature.deactivate('turn-end');
-			const activeCreature = this.activeCreature;
-			this.nextCreature();
-
-			setTimeout(() => {
-				if (!o.noTooltip) {
-					activeCreature.hint(o.tooltip, 'msg_effects');
-				}
-			}, 350);
-		}
+		}, 350);
 	}
+}
 
 	/**
 	 * Delay the action turn of the current creature
@@ -1349,6 +1394,50 @@ export default class Game {
 	// Removed individual args from definition because we are using the arguments variable.
 	onEffectAttach(creature, effect /*, callback */) {
 		this.triggerEffect('onEffectAttach', [creature, effect]);
+
+		// Log the effect application
+		if (this.metricsManager && this.activeCreature) {
+			this.metricsManager.logStatusEffect({
+				source: {
+					id: effect.owner ? effect.owner.id : this.activeCreature.id,
+					name: effect.owner ? effect.owner.name : this.activeCreature.name
+				},
+				target: {
+					id: creature.id,
+					name: creature.name
+				},
+				effect: {
+					name: effect.name,
+					duration: effect.turnLifetime || 0,
+					action: 'applied'
+				},
+				turnNumber: this.turn,
+				roundNumber: this.activeCreature.turnsActive
+			});
+		}
+	}
+
+	onEffectRemove(creature, effect) {
+		// Log the effect removal
+		if (this.metricsManager && this.activeCreature) {
+			this.metricsManager.logStatusEffect({
+				source: {
+					id: effect.owner ? effect.owner.id : this.activeCreature.id,
+					name: effect.owner ? effect.owner.name : this.activeCreature.name
+				},
+				target: {
+					id: creature.id,
+					name: creature.name
+				},
+				effect: {
+					name: effect.name,
+					duration: effect.turnLifetime || 0,
+					action: 'removed'
+				},
+				turnNumber: this.turn,
+				roundNumber: this.activeCreature.turnsActive
+			});
+		}
 	}
 
 	onUnderAttack(creature, damage) {
@@ -1358,15 +1447,69 @@ export default class Game {
 	}
 
 	// Removed individual args from definition because we are using the arguments variable.
-	onDamage(/* creature, damage */) {
+	onDamage(creature: Creature, damage: { damages: Record<string, number>; attacker: Creature }) {
 		this.triggerAbility('onDamage', arguments);
 		this.triggerEffect('onDamage', arguments);
+
+		// Log the damage event
+		if (this.metricsManager && damage.damages) {
+			const totalDamage = Object.values(damage.damages).reduce((sum, val) => {
+				const numVal = typeof val === 'number' ? val : 0;
+				return (typeof sum === 'number' ? sum : 0) + numVal;
+			}, 0);
+			const damageType = Object.keys(damage.damages).join(',');
+			
+			if (this.activeCreature) {
+				const turnNumber = typeof this.turn === 'number' ? this.turn : 0;
+				this.metricsManager.logDamage({
+					source: {
+						id: damage.attacker.id,
+						name: damage.attacker.name,
+						maxHealth: damage.attacker.stats.health,
+						currentHealth: damage.attacker.health
+					},
+					target: {
+						id: creature.id,
+						name: creature.name,
+						maxHealth: creature.stats.health,
+						currentHealth: creature.health
+					},
+					amount: totalDamage,
+					damageType,
+					turnNumber,
+					roundNumber: this.activeCreature.turnsActive
+				});
+			}
+		}
 	}
 
 	// Removed individual args from definition because we are using the arguments variable.
-	onHeal(/* creature, amount */) {
+	onHeal(creature, amount) {
 		this.triggerAbility('onHeal', arguments);
 		this.triggerEffect('onHeal', arguments);
+
+		// Log the healing event
+		if (this.metricsManager && this.activeCreature) {
+			const turnNumber = typeof this.turn === 'number' ? this.turn : 0;
+			this.metricsManager.logHealing({
+				source: {
+					id: this.activeCreature.id,
+					name: this.activeCreature.name,
+					maxHealth: this.activeCreature.stats.health,
+					currentHealth: this.activeCreature.health
+				},
+				target: {
+					id: creature.id,
+					name: creature.name,
+					maxHealth: creature.stats.health,
+					currentHealth: creature.health
+				},
+				amount: amount,
+				isRegrowth: creature.stats.regrowth > 0,
+				turnNumber,
+				roundNumber: this.activeCreature.turnsActive
+			});
+		}
 	}
 
 	onAttack(creature, damage) {
@@ -1465,6 +1608,11 @@ export default class Game {
 		this.stopTimer();
 		this.gameState = 'ended';
 
+		// Determine winner
+		let winner = null;
+		let winningScore = -1;
+		let totalScore = 0;
+
 		//-------End bonuses--------//
 		for (let i = 0; i < this.playerMode; i++) {
 			// No fleeing
@@ -1501,7 +1649,60 @@ export default class Game {
 					type: 'immortal',
 				});
 			}
+
+			// Calculate total score for this player
+			totalScore = this.players[i].score.reduce((sum, scoreItem) => {
+				switch(scoreItem.type) {
+					case 'nofleeing':
+						return sum + 500;
+					case 'creaturebonus':
+						return sum + 300;
+					case 'darkpriestbonus':
+						return sum + 250;
+					case 'immortal':
+						return sum + 1000;
+					default:
+						return sum;
+				}
+			}, 0);
+
+			if (totalScore > winningScore) {
+				winningScore = totalScore;
+				winner = this.players[i];
+			}
 		}
+
+		// Capture final game state
+		const finalState = {
+			gameId: this.metricsManager.getCurrentMetrics()?.gameId,
+			endTime: Date.now(),
+			totalTurns: this.turn,
+			totalRounds: Math.ceil(this.turn / this.playerMode),
+			winner: {
+				id: winner.id,
+				name: winner.name,
+				score: winningScore,
+				remainingCreatures: winner.creatures.filter(c => !c.dead).length
+			},
+			players: this.players.map(player => ({
+				id: player.id,
+				name: player.name,
+				score: player.score.reduce((sum, scoreItem) => {
+					switch(scoreItem.type) {
+						case 'nofleeing': return sum + 500;
+						case 'creaturebonus': return sum + 300;
+						case 'darkpriestbonus': return sum + 250;
+						case 'immortal': return sum + 1000;
+						default: return sum;
+					}
+				}, 0),
+				remainingCreatures: player.creatures.filter(c => !c.dead).length
+			}))
+		};
+
+		this.metricsManager.endGame(finalState);
+		console.log('Game Over - Final State:', finalState);
+
 		this.UI.endGame();
 	}
 
