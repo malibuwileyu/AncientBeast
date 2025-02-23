@@ -1,0 +1,176 @@
+{
+    "id": 39,
+    "name": "Headless",
+    "type": "W3",
+    "realm": "Wrath",
+    "size": 2,
+    "cost": 6,
+    "comprehensiveEfficiency": 27,
+    "roles": {
+        "primary": "Control",
+        "secondary": "Damage",
+        "playstyle": "Aggressive",
+        "AIReasoningPlaystyleContext": "As Headless, I focus on endurance manipulation and fatigue control. My Larva Infest passive triggers at both start and end of turn on rear enemies. I should position behind enemies to maximize Larva Infest stacks. Cartilage Dagger lets me capitalize on fatigued enemies for double damage. Whip Move gives me strong positioning control to set up rear attacks. I excel at draining enemy endurance and punishing fatigued targets. I should actively maintain rear positioning for passive triggers."
+    },
+    "combatMetrics": {
+        "damageOutput": {
+            "burstPotential": 0.7,
+            "sustainedDamage": 0.5,
+            "areaEffect": 0.0,
+            "targetSelection": 0.7
+        },
+        "controlPower": {
+            "immobilization": 0.0,
+            "displacement": 0.7,
+            "debuffs": 0.9,
+            "zoneControl": 0.6
+        },
+        "survivability": {
+            "healthPool": 0.5,
+            "defensiveAbilities": 0.3,
+            "mobilityOptions": 0.7,
+            "recoveryPotential": 0.4
+        },
+        "utility": {
+            "resourceGeneration": 0.5,
+            "teamSupport": 0.3,
+            "mapControl": 0.6,
+            "comboEnablement": 0.7
+        }
+    },
+    "resourceProfile": {
+        "energyUsage": {
+            "optimal": 40,
+            "critical": 16,
+            "regeneration": 26
+        },
+        "enduranceManagement": {
+            "safeThreshold": 24,
+            "riskThreshold": 14,
+            "recoveryPriority": 0.4
+        }
+    },
+    "positioningProfile": {
+        "optimalRange": 6,
+        "formationPlacement": {
+            "frontline": 0.4,
+            "midline": 0.7,
+            "backline": 0.6
+        },
+        "zonePreferences": {
+            "center": 0.5,
+            "flank": 0.7,
+            "defensive": 0.4
+        }
+    },
+    "abilityProfile": {
+        "Larva Infest": {
+            "priority": 0.9,
+            "energyThreshold": 0,
+            "setupRequired": true,
+            "comboFollowup": [
+                "Cartilage Dagger"
+            ],
+            "comboPrecursor": [],
+            "conditions": {
+                "use": [
+                    "Position behind enemies to trigger passive",
+                    "Maintain rear position at both turn start and end",
+                    "Prioritize targets with low endurance",
+                    "When upgraded, focus targets near fatigue"
+                ],
+                "avoid": [
+                    "Exposing self to multiple threats for positioning",
+                    "Targeting enemies with high endurance recovery"
+                ]
+            }
+        },
+        "Cartilage Dagger": {
+            "priority": 0.8,
+            "energyThreshold": 16,
+            "setupRequired": false,
+            "comboFollowup": [],
+            "comboPrecursor": [
+                "Larva Infest"
+            ],
+            "conditions": {
+                "use": [
+                    "Against fatigued enemies for double damage",
+                    "When upgraded and target has high endurance",
+                    "To finish low health targets",
+                    "After Larva Infest stacks are applied"
+                ],
+                "avoid": [
+                    "When energy critical",
+                    "Against non-fatigued targets if alternatives exist",
+                    "When better control options needed"
+                ]
+            }
+        },
+        "Whip Move": {
+            "priority": 0.8,
+            "energyThreshold": 20,
+            "setupRequired": false,
+            "comboFollowup": [
+                "Larva Infest"
+            ],
+            "comboPrecursor": [],
+            "conditions": {
+                "use": [
+                    "To position for Larva Infest triggers",
+                    "To pull enemies away from objectives",
+                    "To disrupt enemy formations",
+                    "When upgraded for extended range"
+                ],
+                "avoid": [
+                    "When pull would help enemy positioning",
+                    "When energy needed for Cartilage Dagger",
+                    "Against very large units with poor pull effect"
+                ]
+            }
+        }
+    },
+    "matchupProfile": {
+        "strongAgainst": [
+            {
+                "type": "Energy Dependent",
+                "reason": "Can quickly fatigue through endurance drain",
+                "priority": 0.9
+            },
+            {
+                "type": "Low Endurance",
+                "reason": "Easy to fatigue with Larva Infest",
+                "priority": 0.8
+            },
+            {
+                "type": "Position Dependent",
+                "reason": "Can disrupt with Whip Move",
+                "priority": 0.7
+            }
+        ],
+        "weakAgainst": [
+            {
+                "type": "High Endurance",
+                "reason": "Difficult to fatigue effectively",
+                "counterplay": [
+                    "Focus on positioning control",
+                    "Use Cartilage Dagger for direct damage",
+                    "Coordinate with team for focus damage"
+                ]
+            },
+            {
+                "type": "High Mobility",
+                "reason": "Can avoid rear positioning",
+                "counterplay": [
+                    "Use Whip Move to force positioning",
+                    "Control space with threat of pull",
+                    "Focus on targets with limited escape options"
+                ]
+            }
+        ]
+    },
+    "synergyProfile": {
+        "pairs": [],
+        "formations": []
+    }
+}

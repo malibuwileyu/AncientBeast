@@ -1,0 +1,193 @@
+{
+    "id": 1,
+    "name": "Bounty Hunter",
+    "type": "A2",
+    "realm": "Avarice",
+    "size": 1,
+    "cost": 2,
+    "comprehensiveEfficiency": 24,
+    "roles": {
+        "primary": "Damage",
+        "secondary": "Control",
+        "playstyle": "Aggressive",
+        "AIReasoningPlaystyleContext": "As Bounty Hunter, I focus on high initiative and mixed-range damage output. My Personal Space passive rewards aggressive positioning with offense and movement bonuses. I should use Sword Slitter for close-range mixed damage. Pistol Shot gives me medium-range options with good pierce damage. Rifle Assassin provides powerful long-range pierce damage. I excel at adapting my attack range based on the situation. I should maintain high initiative (110) to act before enemies and control engagement range."
+    },
+    "combatMetrics": {
+        "damageOutput": {
+            "burstPotential": 0.8,
+            "sustainedDamage": 0.6,
+            "areaEffect": 0.0,
+            "targetSelection": 0.9
+        },
+        "controlPower": {
+            "immobilization": 0.0,
+            "displacement": 0.0,
+            "debuffs": 0.0,
+            "zoneControl": 0.7
+        },
+        "survivability": {
+            "healthPool": 0.4,
+            "defensiveAbilities": 0.3,
+            "mobilityOptions": 0.5,
+            "recoveryPotential": 0.3
+        },
+        "utility": {
+            "resourceGeneration": 0.4,
+            "teamSupport": 0.2,
+            "mapControl": 0.7,
+            "comboEnablement": 0.5
+        }
+    },
+    "resourceProfile": {
+        "energyUsage": {
+            "optimal": 50,
+            "critical": 15,
+            "regeneration": 14
+        },
+        "enduranceManagement": {
+            "safeThreshold": 25,
+            "riskThreshold": 15,
+            "recoveryPriority": 0.5
+        }
+    },
+    "positioningProfile": {
+        "optimalRange": 6,
+        "formationPlacement": {
+            "frontline": 0.4,
+            "midline": 0.8,
+            "backline": 0.6
+        },
+        "zonePreferences": {
+            "center": 0.5,
+            "flank": 0.7,
+            "defensive": 0.4
+        }
+    },
+    "abilityProfile": {
+        "Personal Space": {
+            "priority": 0.8,
+            "energyThreshold": 0,
+            "setupRequired": false,
+            "comboFollowup": [
+                "Sword Slitter"
+            ],
+            "comboPrecursor": [],
+            "conditions": {
+                "use": [
+                    "When enemies are adjacent at turn start",
+                    "When upgraded for 100% bonus",
+                    "Position to maximize offense and movement bonus"
+                ],
+                "avoid": [
+                    "When ranged attacks are better",
+                    "When adjacent positioning is too risky"
+                ]
+            }
+        },
+        "Sword Slitter": {
+            "priority": 0.7,
+            "energyThreshold": 15,
+            "setupRequired": false,
+            "comboFollowup": [],
+            "comboPrecursor": [
+                "Personal Space"
+            ],
+            "conditions": {
+                "use": [
+                    "Against adjacent enemies",
+                    "When Personal Space is active",
+                    "When upgraded and can secure kill",
+                    "When energy above 30%"
+                ],
+                "avoid": [
+                    "When energy critical",
+                    "When safer ranged options exist",
+                    "Against high pierce/slash resistance"
+                ]
+            }
+        },
+        "Pistol Shot": {
+            "priority": 0.8,
+            "energyThreshold": 15,
+            "setupRequired": false,
+            "comboFollowup": [],
+            "comboPrecursor": [],
+            "conditions": {
+                "use": [
+                    "Against medium range targets (up to 6 hexes)",
+                    "When upgraded for double use",
+                    "To maintain safe distance",
+                    "For consistent pierce damage"
+                ],
+                "avoid": [
+                    "When energy critical",
+                    "When target in Rifle Assassin range",
+                    "Against high pierce resistance"
+                ]
+            }
+        },
+        "Rifle Assassin": {
+            "priority": 0.9,
+            "energyThreshold": 35,
+            "setupRequired": true,
+            "comboFollowup": [],
+            "comboPrecursor": [],
+            "conditions": {
+                "use": [
+                    "Against priority long-range targets",
+                    "When upgraded for piercing effect",
+                    "When high damage needed",
+                    "From safe backline position"
+                ],
+                "avoid": [
+                    "When energy below threshold",
+                    "Against adjacent enemies",
+                    "When Pistol Shot is sufficient"
+                ]
+            }
+        }
+    },
+    "matchupProfile": {
+        "strongAgainst": [
+            {
+                "type": "Low Defense",
+                "reason": "Can burst with Rifle Assassin",
+                "priority": 0.9
+            },
+            {
+                "type": "Ranged Units",
+                "reason": "Can match or outrange them",
+                "priority": 0.8
+            },
+            {
+                "type": "Low Mobility",
+                "reason": "Can control engagement range",
+                "priority": 0.7
+            }
+        ],
+        "weakAgainst": [
+            {
+                "type": "High Pierce Resistance",
+                "reason": "Reduces main damage type",
+                "counterplay": [
+                    "Use Sword Slitter for mixed damage",
+                    "Maintain optimal range",
+                    "Focus on positioning advantage"
+                ]
+            },
+            {
+                "type": "Fast Melee",
+                "reason": "Can bypass range advantage",
+                "counterplay": [
+                    "Use Personal Space bonus",
+                    "Keep maximum distance",
+                    "Save energy for escape options"
+                ]
+            }
+        ]
+    },
+    "synergyProfile": {
+        "pairs": [],
+        "formations": []
+    }
+}

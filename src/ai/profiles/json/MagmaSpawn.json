@@ -1,0 +1,199 @@
+{
+    "id": 8,
+    "name": "Magma Spawn",
+    "type": "P8",
+    "realm": "Pride",
+    "size": 3,
+    "cost": 5,
+    "comprehensiveEfficiency": 31,
+    "roles": {
+        "primary": "Control",
+        "secondary": "Damage",
+        "playstyle": "Defensive",
+        "AIReasoningPlaystyleContext": "As Magma Spawn, I focus on area control through lava and burn damage. My Burning Body passive punishes melee attackers with burn damage. I should use Scorched Earth to create lava zones for area control. Fiery Touch provides strong melee damage with burn. Molten Hurl gives me ranged options and can create more lava. I excel at zone control and sustained damage through burns and lava. I should maintain good positioning to maximize lava zone coverage."
+    },
+    "combatMetrics": {
+        "damageOutput": {
+            "burstPotential": 0.7,
+            "sustainedDamage": 0.8,
+            "areaEffect": 0.9,
+            "targetSelection": 0.6
+        },
+        "controlPower": {
+            "immobilization": 0.0,
+            "displacement": 0.0,
+            "debuffs": 0.7,
+            "zoneControl": 0.9
+        },
+        "survivability": {
+            "healthPool": 0.7,
+            "defensiveAbilities": 0.6,
+            "mobilityOptions": 0.3,
+            "recoveryPotential": 0.4
+        },
+        "utility": {
+            "resourceGeneration": 0.5,
+            "teamSupport": 0.3,
+            "mapControl": 0.9,
+            "comboEnablement": 0.6
+        }
+    },
+    "resourceProfile": {
+        "energyUsage": {
+            "optimal": 50,
+            "critical": 20,
+            "regeneration": 20
+        },
+        "enduranceManagement": {
+            "safeThreshold": 20,
+            "riskThreshold": 10,
+            "recoveryPriority": 0.5
+        }
+    },
+    "positioningProfile": {
+        "optimalRange": 2,
+        "formationPlacement": {
+            "frontline": 0.7,
+            "midline": 0.6,
+            "backline": 0.3
+        },
+        "zonePreferences": {
+            "center": 0.8,
+            "flank": 0.5,
+            "defensive": 0.6
+        }
+    },
+    "abilityProfile": {
+        "Burning Body": {
+            "priority": 0.8,
+            "energyThreshold": 0,
+            "setupRequired": false,
+            "comboFollowup": [
+                "Fiery Touch"
+            ],
+            "comboPrecursor": [],
+            "conditions": {
+                "use": [
+                    "Position to bait melee attacks",
+                    "When upgraded for increased burn",
+                    "Maintain position in lava when possible",
+                    "Against enemies with low burn resistance"
+                ],
+                "avoid": [
+                    "Taking unnecessary damage",
+                    "When burn damage would be ineffective"
+                ]
+            }
+        },
+        "Scorched Earth": {
+            "priority": 0.9,
+            "energyThreshold": 20,
+            "setupRequired": false,
+            "comboFollowup": [
+                "Fiery Touch",
+                "Molten Hurl"
+            ],
+            "comboPrecursor": [],
+            "conditions": {
+                "use": [
+                    "To create defensive zones",
+                    "To control key areas",
+                    "When upgraded for increased damage",
+                    "To setup for other abilities"
+                ],
+                "avoid": [
+                    "When energy critical",
+                    "When lava would block team movement",
+                    "Creating isolated lava patches"
+                ]
+            }
+        },
+        "Fiery Touch": {
+            "priority": 0.7,
+            "energyThreshold": 25,
+            "setupRequired": false,
+            "comboFollowup": [],
+            "comboPrecursor": [
+                "Scorched Earth"
+            ],
+            "conditions": {
+                "use": [
+                    "Against adjacent enemies",
+                    "When target is in lava",
+                    "When upgraded for bonus burn",
+                    "To finish burning targets"
+                ],
+                "avoid": [
+                    "When energy critical",
+                    "Against high burn resistance",
+                    "Breaking advantageous position"
+                ]
+            }
+        },
+        "Molten Hurl": {
+            "priority": 0.8,
+            "energyThreshold": 40,
+            "setupRequired": true,
+            "comboFollowup": [],
+            "comboPrecursor": [
+                "Scorched Earth"
+            ],
+            "conditions": {
+                "use": [
+                    "To create distant lava zones",
+                    "Against groups of enemies",
+                    "When upgraded for increased range",
+                    "To maintain pressure at range"
+                ],
+                "avoid": [
+                    "When energy needed for control",
+                    "When single target damage better",
+                    "Creating disadvantageous lava"
+                ]
+            }
+        }
+    },
+    "matchupProfile": {
+        "strongAgainst": [
+            {
+                "type": "Melee Units",
+                "reason": "Punishes with passive and lava zones",
+                "priority": 0.9
+            },
+            {
+                "type": "Low Mobility",
+                "reason": "Cannot escape lava zones easily",
+                "priority": 0.8
+            },
+            {
+                "type": "Groups",
+                "reason": "Strong area control and burn spread",
+                "priority": 0.7
+            }
+        ],
+        "weakAgainst": [
+            {
+                "type": "High Burn Resistance",
+                "reason": "Reduces main damage source",
+                "counterplay": [
+                    "Focus on zone control",
+                    "Use lava for positioning",
+                    "Coordinate with team damage"
+                ]
+            },
+            {
+                "type": "High Mobility",
+                "reason": "Can avoid lava zones",
+                "counterplay": [
+                    "Create overlapping zones",
+                    "Use Molten Hurl for pressure",
+                    "Force movement with positioning"
+                ]
+            }
+        ]
+    },
+    "synergyProfile": {
+        "pairs": [],
+        "formations": []
+    }
+}

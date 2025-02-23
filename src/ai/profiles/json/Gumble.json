@@ -1,0 +1,196 @@
+{
+    "id": 14,
+    "name": "Gumble",
+    "type": "P1",
+    "realm": "Pride",
+    "size": 1,
+    "cost": 2,
+    "comprehensiveEfficiency": 29,
+    "roles": {
+        "primary": "Control",
+        "secondary": "Damage",
+        "playstyle": "Defensive",
+        "AIReasoningPlaystyleContext": "As Gumble, I focus on area control and disruption through my unique abilities. My Gooey Body passive makes me stronger in physical combat as my health increases. I should use Gummy Mallet for area damage and zone control. Royal Seal lets me control enemy movement by creating sticky traps. Boom Box provides both damage and displacement for tactical positioning. I excel at controlling space and punishing enemy positioning mistakes. I should maintain high health to maximize my passive physical damage bonuses."
+    },
+    "combatMetrics": {
+        "damageOutput": {
+            "burstPotential": 0.6,
+            "sustainedDamage": 0.4,
+            "areaEffect": 0.7,
+            "targetSelection": 0.6
+        },
+        "controlPower": {
+            "immobilization": 0.8,
+            "displacement": 0.6,
+            "debuffs": 0.0,
+            "zoneControl": 0.8
+        },
+        "survivability": {
+            "healthPool": 0.4,
+            "defensiveAbilities": 0.6,
+            "mobilityOptions": 0.4,
+            "recoveryPotential": 0.3
+        },
+        "utility": {
+            "resourceGeneration": 0.6,
+            "teamSupport": 0.4,
+            "mapControl": 0.7,
+            "comboEnablement": 0.5
+        }
+    },
+    "resourceProfile": {
+        "energyUsage": {
+            "optimal": 50,
+            "critical": 20,
+            "regeneration": 43
+        },
+        "enduranceManagement": {
+            "safeThreshold": 35,
+            "riskThreshold": 20,
+            "recoveryPriority": 0.5
+        }
+    },
+    "positioningProfile": {
+        "optimalRange": 3,
+        "formationPlacement": {
+            "frontline": 0.4,
+            "midline": 0.8,
+            "backline": 0.5
+        },
+        "zonePreferences": {
+            "center": 0.7,
+            "flank": 0.6,
+            "defensive": 0.7
+        }
+    },
+    "abilityProfile": {
+        "Gooey Body": {
+            "priority": 0.8,
+            "energyThreshold": 0,
+            "setupRequired": false,
+            "comboFollowup": [],
+            "comboPrecursor": [],
+            "conditions": {
+                "use": [
+                    "Maintain high health for maximum physical mastery bonuses",
+                    "Each 7 health provides 3 bonus points to pierce/slash/crush",
+                    "Position more aggressively when health is high"
+                ],
+                "avoid": [
+                    "Risky positions when health is low",
+                    "Trading health when physical bonus is needed"
+                ]
+            }
+        },
+        "Gummy Mallet": {
+            "priority": 0.7,
+            "energyThreshold": 25,
+            "setupRequired": false,
+            "comboFollowup": [
+                "Boom Box"
+            ],
+            "comboPrecursor": [],
+            "conditions": {
+                "use": [
+                    "When multiple enemies are in range",
+                    "To control important zones",
+                    "When upgraded, prioritize enemy units over allies",
+                    "To maximize area damage potential"
+                ],
+                "avoid": [
+                    "When energy is needed for Royal Seal",
+                    "When only hitting allies",
+                    "When single target damage is better"
+                ]
+            }
+        },
+        "Royal Seal": {
+            "priority": 0.9,
+            "energyThreshold": 20,
+            "setupRequired": true,
+            "comboFollowup": [
+                "Gummy Mallet",
+                "Boom Box"
+            ],
+            "comboPrecursor": [],
+            "conditions": {
+                "use": [
+                    "To block enemy escape routes",
+                    "To protect important zones",
+                    "When upgraded, to reposition with leap",
+                    "To set up for area control"
+                ],
+                "avoid": [
+                    "When allies need the path",
+                    "When energy critical",
+                    "When better control options exist"
+                ]
+            }
+        },
+        "Boom Box": {
+            "priority": 0.8,
+            "energyThreshold": 30,
+            "setupRequired": false,
+            "comboFollowup": [],
+            "comboPrecursor": [
+                "Royal Seal"
+            ],
+            "conditions": {
+                "use": [
+                    "Against adjacent enemies for bonus crush damage",
+                    "To push enemies into disadvantageous positions",
+                    "When upgraded and cannot push target",
+                    "To disrupt enemy formations"
+                ],
+                "avoid": [
+                    "When push would help enemy",
+                    "When energy needed for Royal Seal",
+                    "When target has high sonic resistance"
+                ]
+            }
+        }
+    },
+    "matchupProfile": {
+        "strongAgainst": [
+            {
+                "type": "Position Dependent",
+                "reason": "Can disrupt positioning with Royal Seal and Boom Box",
+                "priority": 0.8
+            },
+            {
+                "type": "Melee Units",
+                "reason": "Can control space and punish approaches",
+                "priority": 0.7
+            },
+            {
+                "type": "Groups",
+                "reason": "Strong area control with Gummy Mallet",
+                "priority": 0.7
+            }
+        ],
+        "weakAgainst": [
+            {
+                "type": "High Mobility",
+                "reason": "Can avoid control zones and traps",
+                "counterplay": [
+                    "Use Royal Seal proactively",
+                    "Save Boom Box for displacement",
+                    "Control key zones with Gummy Mallet"
+                ]
+            },
+            {
+                "type": "Long Range",
+                "reason": "Can attack from outside control range",
+                "counterplay": [
+                    "Use terrain for cover",
+                    "Maintain high health for passive",
+                    "Use Boom Box to close distance"
+                ]
+            }
+        ]
+    },
+    "synergyProfile": {
+        "pairs": [],
+        "formations": []
+    }
+}

@@ -1,0 +1,185 @@
+{
+    "id": 6,
+    "name": "Vehemoth",
+    "type": "S7",
+    "realm": "Sloth",
+    "size": 3,
+    "comprehensiveEfficiency": 31,
+    "cost": 10,
+    "roles": {
+        "primary": "Tank",
+        "secondary": "Control",
+        "playstyle": "Defensive",
+        "AIReasoningPlaystyleContext": "Becomes increasingly powerful through Lamellar Body stacks from Sloth units while controlling through frost damage and executes"
+    },
+    "combatMetrics": {
+        "damageOutput": {
+            "burstPotential": 0.7,
+            "sustainedDamage": 0.6,
+            "areaEffect": 0.0,
+            "targetSelection": 0.7
+        },
+        "controlPower": {
+            "immobilization": 0.7,
+            "displacement": 0.6,
+            "debuffs": 0.0,
+            "zoneControl": 0.8
+        },
+        "survivability": {
+            "healthPool": 0.9,
+            "defensiveAbilities": 0.9,
+            "mobilityOptions": 0.4,
+            "recoveryPotential": 0.2
+        },
+        "utility": {
+            "resourceGeneration": 0.5,
+            "teamSupport": 0.3,
+            "mapControl": 0.7,
+            "comboEnablement": 0.7
+        }
+    },
+    "resourceProfile": {
+        "energyUsage": {
+            "optimal": 60,
+            "critical": 25,
+            "regeneration": 25
+        },
+        "enduranceManagement": {
+            "safeThreshold": 0.67,
+            "riskThreshold": 0.33,
+            "recoveryPriority": 0.7
+        }
+    },
+    "positioningProfile": {
+        "optimalRange": 2,
+        "formationPlacement": {
+            "frontline": 0.9,
+            "midline": 0.5,
+            "backline": 0.2
+        },
+        "zonePreferences": {
+            "center": 0.8,
+            "flank": 0.5,
+            "defensive": 0.7
+        }
+    },
+    "abilityProfile": {
+        "lamellarBody": {
+            "priority": 0.9,
+            "energyThreshold": 0,
+            "setupRequired": false,
+            "comboFollowup": [],
+            "comboPrecursor": [],
+            "conditions": {
+                "use": [
+                    "nearSlothUnits",
+                    "upgradedRegrowth",
+                    "bonusCalculation"
+                ],
+                "avoid": [
+                    "isolatedPosition",
+                    "breakFormation"
+                ]
+            }
+        },
+        "flatFrons": {
+            "priority": 0.8,
+            "energyThreshold": 25,
+            "setupRequired": false,
+            "comboFollowup": [],
+            "comboPrecursor": [
+                "flakeConvertor"
+            ],
+            "conditions": {
+                "use": [
+                    "frozenUnder50",
+                    "upgradedCharge",
+                    "mixedDamage"
+                ],
+                "avoid": [
+                    "criticalEnergy",
+                    "nonFrozenHigh",
+                    "exposedPosition"
+                ]
+            }
+        },
+        "flakeConvertor": {
+            "priority": 0.8,
+            "energyThreshold": 30,
+            "setupRequired": true,
+            "comboFollowup": [
+                "flatFrons"
+            ],
+            "comboPrecursor": [],
+            "conditions": {
+                "use": [
+                    "fatiguedInRange",
+                    "setupExecution",
+                    "lowFrostMastery"
+                ],
+                "avoid": [
+                    "highFrostMastery",
+                    "needFlatFrons",
+                    "quickRecovery"
+                ]
+            }
+        }
+    },
+    "matchupProfile": {
+        "strongAgainst": [
+            {
+                "type": "Low Frost Resistance",
+                "reason": "Can stack high frost damage",
+                "priority": 0.9
+            },
+            {
+                "type": "Fatigued Units",
+                "reason": "Can freeze and execute",
+                "priority": 0.8
+            }
+        ],
+        "weakAgainst": [
+            {
+                "type": "High Frost Resistance",
+                "reason": "Reduces main damage type",
+                "counterplay": [
+                    "focus crush damage",
+                    "use charge tactics"
+                ]
+            },
+            {
+                "type": "Percentage Damage",
+                "reason": "Bypasses high defense",
+                "counterplay": [
+                    "maintain distance",
+                    "offensive control"
+                ]
+            }
+        ]
+    },
+    "synergyProfile": {
+        "pairs": [
+            {
+                "unit": "Knightmare",
+                "synergy": "Stacks frost control and defense",
+                "strength": 0.9
+            },
+            {
+                "unit": "Snow Bunny",
+                "synergy": "Provides additional frost control",
+                "strength": 0.8
+            }
+        ],
+        "formations": [
+            {
+                "units": [
+                    "Vehemoth",
+                    "Knightmare",
+                    "Snow Bunny"
+                ],
+                "strategy": "Triple Sloth frost control and defense stacking",
+                "effectiveness": 0.9
+            }
+        ]
+    }
+}

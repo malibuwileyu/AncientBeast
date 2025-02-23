@@ -1,0 +1,163 @@
+{
+    "id": 9,
+    "name": "Snow Bunny",
+    "type": "G9",
+    "realm": "Frost",
+    "size": 1,
+    "comprehensiveEfficiency": 32,
+    "cost": 2,
+    "roles": {
+        "primary": "Support",
+        "secondary": "Control",
+        "playstyle": "Defensive",
+        "AIReasoningPlaystyleContext": "Specializes in defensive support and area control through frost-based abilities"
+    },
+    "combatMetrics": {
+        "damageOutput": {
+            "burstPotential": 0.3,
+            "sustainedDamage": 0.4,
+            "areaEffect": 0.7,
+            "targetSelection": 0.6
+        },
+        "controlPower": {
+            "immobilization": 0.8,
+            "displacement": 0.5,
+            "debuffs": 0.7,
+            "zoneControl": 0.8
+        },
+        "survivability": {
+            "healthPool": 0.5,
+            "defensiveAbilities": 0.7,
+            "mobilityOptions": 0.8,
+            "recoveryPotential": 0.6
+        },
+        "utility": {
+            "resourceGeneration": 0.5,
+            "teamSupport": 0.9,
+            "mapControl": 0.7,
+            "comboEnablement": 0.6
+        }
+    },
+    "resourceProfile": {
+        "energyUsage": {
+            "optimal": 35,
+            "critical": 20,
+            "regeneration": 0.3
+        },
+        "enduranceManagement": {
+            "safeThreshold": 0.7,
+            "riskThreshold": 0.4,
+            "recoveryPriority": 0.6
+        }
+    },
+    "positioningProfile": {
+        "optimalRange": 4,
+        "formationPlacement": {
+            "frontline": 0.2,
+            "midline": 0.6,
+            "backline": 0.9
+        },
+        "zonePreferences": {
+            "center": 0.4,
+            "flank": 0.3,
+            "defensive": 0.9
+        }
+    },
+    "abilityProfile": {
+        "frostBarrier": {
+            "priority": 0.9,
+            "energyThreshold": 20,
+            "setupRequired": false,
+            "comboFollowup": [
+                "freezeRay"
+            ],
+            "comboPrecursor": [],
+            "conditions": {
+                "use": [
+                    "allyUnderAttack",
+                    "defensivePosition"
+                ],
+                "avoid": [
+                    "noThreats",
+                    "betterDefenseAvailable"
+                ]
+            }
+        },
+        "freezeRay": {
+            "priority": 0.8,
+            "energyThreshold": 25,
+            "setupRequired": true,
+            "comboFollowup": [],
+            "comboPrecursor": [
+                "frostBarrier"
+            ],
+            "conditions": {
+                "use": [
+                    "enemyApproaching",
+                    "clearLine"
+                ],
+                "avoid": [
+                    "lowEnergy",
+                    "allyInDanger"
+                ]
+            }
+        }
+    },
+    "matchupProfile": {
+        "strongAgainst": [
+            {
+                "type": "Melee",
+                "reason": "Can control approach and protect allies",
+                "priority": 0.8
+            },
+            {
+                "type": "Aggressive",
+                "reason": "Excels at defensive counter-play",
+                "priority": 0.7
+            }
+        ],
+        "weakAgainst": [
+            {
+                "type": "Long Range",
+                "reason": "Can be pressured from outside frost range",
+                "counterplay": [
+                    "use cover",
+                    "maintain defensive positioning"
+                ]
+            },
+            {
+                "type": "Mobile Flanker",
+                "reason": "Can bypass defensive setup",
+                "counterplay": [
+                    "stay near allies",
+                    "preemptive barrier placement"
+                ]
+            }
+        ]
+    },
+    "synergyProfile": {
+        "pairs": [
+            {
+                "unit": "Dark Priest",
+                "synergy": "Enhanced defensive capabilities",
+                "strength": 0.8
+            },
+            {
+                "unit": "Nutcase",
+                "synergy": "Zone control combination",
+                "strength": 0.75
+            }
+        ],
+        "formations": [
+            {
+                "units": [
+                    "Snow Bunny",
+                    "Dark Priest",
+                    "Nutcase"
+                ],
+                "strategy": "Layered defense and control",
+                "effectiveness": 0.85
+            }
+        ]
+    }
+}

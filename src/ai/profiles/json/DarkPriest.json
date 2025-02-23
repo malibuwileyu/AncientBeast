@@ -1,0 +1,229 @@
+{
+    "id": 1,
+    "name": "Dark Priest",
+    "type": "--",
+    "realm": "--",
+    "size": 1,
+    "cost": "--",
+    "comprehensiveEfficiency": -1,
+    "roles": {
+        "primary": "Support",
+        "secondary": "Control",
+        "playstyle": "Summoner",
+        "AIReasoningPlaystyleContext": "Primary summoner unit that must be protected. Focuses on summoning powerful units while maintaining plasma economy and defensive positioning."
+    },
+    "combatMetrics": {
+        "damageOutput": {
+            "burstPotential": 0.3,
+            "sustainedDamage": 0.2,
+            "areaEffect": 0.0,
+            "targetSelection": 0.6
+        },
+        "controlPower": {
+            "immobilization": 0.0,
+            "displacement": 0.0,
+            "debuffs": 0.0,
+            "zoneControl": 0.4
+        },
+        "survivability": {
+            "healthPool": 0.3,
+            "defensiveAbilities": 0.7,
+            "mobilityOptions": 0.2,
+            "recoveryPotential": 0.3
+        },
+        "utility": {
+            "resourceGeneration": 0.0,
+            "teamSupport": 1.0,
+            "mapControl": 0.3,
+            "comboEnablement": 0.8
+        }
+    },
+    "resourceProfile": {
+        "energyUsage": {
+            "optimal": 40,
+            "critical": 20,
+            "regeneration": 15
+        },
+        "plasmaUsage": {
+            "defensive": 20,
+            "summoning": {
+                "minRequired": 10,
+                "optimalPool": 30,
+                "scalingCost": "Based on unit size and level"
+            }
+        },
+        "enduranceManagement": {
+            "safeThreshold": 0.7,
+            "riskThreshold": 0.4,
+            "recoveryPriority": 0.8
+        }
+    },
+    "positioningProfile": {
+        "optimalRange": 4,
+        "formationPlacement": {
+            "frontline": 0.0,
+            "midline": 0.3,
+            "backline": 1.0
+        },
+        "zonePreferences": {
+            "center": 0.2,
+            "flank": 0.3,
+            "defensive": 0.9
+        }
+    },
+    "abilityProfile": {
+        "plasmaField": {
+            "priority": 0.9,
+            "energyThreshold": 0,
+            "setupRequired": false,
+            "comboFollowup": [],
+            "comboPrecursor": [],
+            "conditions": {
+                "use": [
+                    "underAttack",
+                    "hasPlasma",
+                    "upgradedCounterMelee"
+                ],
+                "avoid": [
+                    "noPlasma",
+                    "wasteShield"
+                ]
+            },
+            "details": {
+                "trigger": "onUnderAttack",
+                "plasmaCost": 1,
+                "upgradedEffect": "Counter melee with 9 pure damage"
+            }
+        },
+        "electroShocker": {
+            "priority": 0.6,
+            "energyThreshold": 20,
+            "setupRequired": false,
+            "comboFollowup": [],
+            "comboPrecursor": [],
+            "conditions": {
+                "use": [
+                    "enemyInRange",
+                    "largeSizeTarget",
+                    "safeToApproach"
+                ],
+                "avoid": [
+                    "lowHealth",
+                    "betterOptionsAvailable"
+                ]
+            },
+            "details": {
+                "range": "Adjacent (4 when upgraded)",
+                "damage": "12 * target size shock damage"
+            }
+        },
+        "disruptorBeam": {
+            "priority": 0.7,
+            "energyThreshold": 25,
+            "setupRequired": false,
+            "comboFollowup": [],
+            "comboPrecursor": [],
+            "conditions": {
+                "use": [
+                    "injuredTarget",
+                    "enoughPlasmaForSize",
+                    "upgradedMinDamage"
+                ],
+                "avoid": [
+                    "targetFullHealth",
+                    "plasmaBetterForSummoning"
+                ]
+            },
+            "details": {
+                "range": 2,
+                "plasmaCost": "Equal to target size",
+                "damage": "Target's missing health (min 40 when upgraded)"
+            }
+        },
+        "godletPrinter": {
+            "priority": 1.0,
+            "energyThreshold": 30,
+            "setupRequired": true,
+            "comboFollowup": [],
+            "comboPrecursor": [],
+            "conditions": {
+                "use": [
+                    "adequatePlasma",
+                    "belowUnitLimit",
+                    "needSpecificUnit",
+                    "safePosition"
+                ],
+                "avoid": [
+                    "lowPlasma",
+                    "maxUnits",
+                    "underThreat"
+                ]
+            },
+            "details": {
+                "range": "4 (6 when upgraded)",
+                "plasmaCost": "Based on unit size + level",
+                "restrictions": [
+                    "Requires sufficient plasma",
+                    "Team must be below unit limit"
+                ]
+            }
+        }
+    },
+    "matchupProfile": {
+        "strongAgainst": [
+            {
+                "type": "Slow Units",
+                "reason": "Can summon counters safely",
+                "priority": 0.8
+            },
+            {
+                "type": "Single Target Damage",
+                "reason": "Plasma Field protection",
+                "priority": 0.7
+            }
+        ],
+        "weakAgainst": [
+            {
+                "type": "Fast Assassins",
+                "reason": "Can bypass frontline and threaten",
+                "counterplay": [
+                    "maintain safe position",
+                    "summon protective units"
+                ]
+            },
+            {
+                "type": "Area Control",
+                "reason": "Limits safe summoning positions",
+                "counterplay": [
+                    "summon units to clear zones",
+                    "use upgraded range"
+                ]
+            }
+        ]
+    },
+    "synergyProfile": {
+        "pairs": [
+            {
+                "unit": "Nightmare",
+                "synergy": "Strong control unit that protects Dark Priest",
+                "strength": 0.9
+            },
+            {
+                "unit": "Snow Bunny",
+                "synergy": "Additional protection and zone control",
+                "strength": 0.8
+            }
+        ],
+        "formations": [
+            {
+                "units": [
+                    "Dark Priest",
+                    "Nightmare",
+                    "Snow Bunny"
+                ],
+                "strategy": "Protected summoning with layered defense",
+                "effectiveness": 0.9
+            }
+        ]
+    }
+}

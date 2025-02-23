@@ -1,0 +1,208 @@
+{
+    "id": 3,
+    "name": "Uncle Fungus",
+    "type": "G3",
+    "realm": "Gluttony",
+    "size": 2,
+    "comprehensiveEfficiency": 28,
+    "cost": 5,
+    "roles": {
+        "primary": "Control",
+        "secondary": "Tank",
+        "playstyle": "Defensive",
+        "AIReasoningPlaystyleContext": "Controls enemies through regrowth debuffs and sustain while wearing down opponents through passive Toxic Spores"
+    },
+    "combatMetrics": {
+        "damageOutput": {
+            "burstPotential": 0.6,
+            "sustainedDamage": 0.5,
+            "areaEffect": 0.0,
+            "targetSelection": 0.7
+        },
+        "controlPower": {
+            "immobilization": 0.0,
+            "displacement": 0.4,
+            "debuffs": 0.9,
+            "zoneControl": 0.7
+        },
+        "survivability": {
+            "healthPool": 0.6,
+            "defensiveAbilities": 0.7,
+            "mobilityOptions": 0.6,
+            "recoveryPotential": 0.8
+        },
+        "utility": {
+            "resourceGeneration": 0.8,
+            "teamSupport": 0.3,
+            "mapControl": 0.6,
+            "comboEnablement": 0.5
+        }
+    },
+    "resourceProfile": {
+        "energyUsage": {
+            "optimal": 60,
+            "critical": 20,
+            "regeneration": 45
+        },
+        "enduranceManagement": {
+            "safeThreshold": 0.67,
+            "riskThreshold": 0.33,
+            "recoveryPriority": 0.5
+        }
+    },
+    "positioningProfile": {
+        "optimalRange": 1,
+        "formationPlacement": {
+            "frontline": 0.8,
+            "midline": 0.5,
+            "backline": 0.2
+        },
+        "zonePreferences": {
+            "center": 0.7,
+            "flank": 0.6,
+            "defensive": 0.6
+        }
+    },
+    "abilityProfile": {
+        "toxicSpores": {
+            "priority": 0.9,
+            "energyThreshold": 0,
+            "setupRequired": false,
+            "comboFollowup": [
+                "supperChomp"
+            ],
+            "comboPrecursor": [],
+            "conditions": {
+                "use": [
+                    "baitMeleeAttacks",
+                    "upgradedDebuff",
+                    "highRegrowthTargets"
+                ],
+                "avoid": [
+                    "unnecessaryDamage",
+                    "rangedExposure"
+                ]
+            }
+        },
+        "supperChomp": {
+            "priority": 0.8,
+            "energyThreshold": 20,
+            "setupRequired": false,
+            "comboFollowup": [],
+            "comboPrecursor": [
+                "toxicSpores"
+            ],
+            "conditions": {
+                "use": [
+                    "lowHealth",
+                    "highHealthTarget",
+                    "upgradedHealing"
+                ],
+                "avoid": [
+                    "fullHealth",
+                    "criticalEnergy",
+                    "lowHealthTarget"
+                ]
+            }
+        },
+        "froggerJump": {
+            "priority": 0.7,
+            "energyThreshold": 25,
+            "setupRequired": false,
+            "comboFollowup": [
+                "sabreKick"
+            ],
+            "comboPrecursor": [],
+            "conditions": {
+                "use": [
+                    "reachPriority",
+                    "escapePosition",
+                    "offenseBonus"
+                ],
+                "avoid": [
+                    "optimalPosition",
+                    "needHealingEnergy",
+                    "breakPassive"
+                ]
+            }
+        },
+        "sabreKick": {
+            "priority": 0.7,
+            "energyThreshold": 30,
+            "setupRequired": false,
+            "comboFollowup": [],
+            "comboPrecursor": [
+                "froggerJump"
+            ],
+            "conditions": {
+                "use": [
+                    "afterJump",
+                    "upgradedKnockback",
+                    "physicalWeak"
+                ],
+                "avoid": [
+                    "criticalEnergy",
+                    "needHealing",
+                    "breakPosition"
+                ]
+            }
+        }
+    },
+    "matchupProfile": {
+        "strongAgainst": [
+            {
+                "type": "High Regrowth",
+                "reason": "Can stack regrowth debuffs",
+                "priority": 0.9
+            },
+            {
+                "type": "Melee Units",
+                "reason": "Punishes with passive on attacks",
+                "priority": 0.8
+            }
+        ],
+        "weakAgainst": [
+            {
+                "type": "Ranged Control",
+                "reason": "Can't apply passive debuffs",
+                "counterplay": [
+                    "use Frogger Jump to close",
+                    "focus on sustain"
+                ]
+            },
+            {
+                "type": "Burst Damage",
+                "reason": "Can be killed before healing",
+                "counterplay": [
+                    "keep Supper Chomp ready",
+                    "safe positioning"
+                ]
+            }
+        ]
+    },
+    "synergyProfile": {
+        "pairs": [
+            {
+                "unit": "Area Control",
+                "synergy": "Forces enemies into melee range",
+                "strength": 0.8
+            },
+            {
+                "unit": "Ranged Damage",
+                "synergy": "Provides frontline control",
+                "strength": 0.7
+            }
+        ],
+        "formations": [
+            {
+                "units": [
+                    "Uncle Fungus",
+                    "Area Control",
+                    "Ranged"
+                ],
+                "strategy": "Control and punish approach",
+                "effectiveness": 0.8
+            }
+        ]
+    }
+}

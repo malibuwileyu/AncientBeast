@@ -1,0 +1,207 @@
+{
+    "id": 37,
+    "name": "Swine Thug",
+    "type": "A1",
+    "realm": "Avarice",
+    "size": 1,
+    "comprehensiveEfficiency": 30,
+    "cost": 2,
+    "roles": {
+        "primary": "Tank",
+        "secondary": "Control",
+        "playstyle": "Defensive",
+        "AIReasoningPlaystyleContext": "Controls space through mud baths while maximizing defensive bonuses from Spa Goggles passive"
+    },
+    "combatMetrics": {
+        "damageOutput": {
+            "burstPotential": 0.6,
+            "sustainedDamage": 0.5,
+            "areaEffect": 0.4,
+            "targetSelection": 0.7
+        },
+        "controlPower": {
+            "immobilization": 0.0,
+            "displacement": 0.7,
+            "debuffs": 0.5,
+            "zoneControl": 0.8
+        },
+        "survivability": {
+            "healthPool": 0.5,
+            "defensiveAbilities": 0.8,
+            "mobilityOptions": 0.4,
+            "recoveryPotential": 0.7
+        },
+        "utility": {
+            "resourceGeneration": 0.6,
+            "teamSupport": 0.4,
+            "mapControl": 0.8,
+            "comboEnablement": 0.6
+        }
+    },
+    "resourceProfile": {
+        "energyUsage": {
+            "optimal": 50,
+            "critical": 20,
+            "regeneration": 25
+        },
+        "enduranceManagement": {
+            "safeThreshold": 0.67,
+            "riskThreshold": 0.33,
+            "recoveryPriority": 0.6
+        }
+    },
+    "positioningProfile": {
+        "optimalRange": 3,
+        "formationPlacement": {
+            "frontline": 0.8,
+            "midline": 0.6,
+            "backline": 0.3
+        },
+        "zonePreferences": {
+            "center": 0.7,
+            "flank": 0.6,
+            "defensive": 0.8
+        }
+    },
+    "abilityProfile": {
+        "spaGoggles": {
+            "priority": 0.9,
+            "energyThreshold": 0,
+            "setupRequired": true,
+            "comboFollowup": [],
+            "comboPrecursor": [
+                "mudBath"
+            ],
+            "conditions": {
+                "use": [
+                    "inMudBath",
+                    "upgradedBonus",
+                    "maintainPosition"
+                ],
+                "avoid": [
+                    "leavingMudUnnecessarily",
+                    "disadvantageousPosition"
+                ]
+            }
+        },
+        "baseballBaton": {
+            "priority": 0.8,
+            "energyThreshold": 20,
+            "setupRequired": false,
+            "comboFollowup": [
+                "mudBath"
+            ],
+            "comboPrecursor": [],
+            "conditions": {
+                "use": [
+                    "adjacentEnemies",
+                    "pushIntoMud",
+                    "createSpace"
+                ],
+                "avoid": [
+                    "criticalEnergy",
+                    "helpfulPush",
+                    "breakPosition"
+                ]
+            }
+        },
+        "groundBall": {
+            "priority": 0.7,
+            "energyThreshold": 25,
+            "setupRequired": true,
+            "comboFollowup": [],
+            "comboPrecursor": [
+                "baseballBaton"
+            ],
+            "conditions": {
+                "use": [
+                    "straightLineEnemies",
+                    "rangePressure",
+                    "avoidMudZones"
+                ],
+                "avoid": [
+                    "needControlEnergy",
+                    "blockedLineOfSight"
+                ]
+            }
+        },
+        "mudBath": {
+            "priority": 0.9,
+            "energyThreshold": 30,
+            "setupRequired": false,
+            "comboFollowup": [
+                "spaGoggles"
+            ],
+            "comboPrecursor": [],
+            "conditions": {
+                "use": [
+                    "createDefensivePosition",
+                    "slowEnemy",
+                    "setupControl"
+                ],
+                "avoid": [
+                    "criticalEnergy",
+                    "blockTeamMovement",
+                    "isolatedMud"
+                ]
+            }
+        }
+    },
+    "matchupProfile": {
+        "strongAgainst": [
+            {
+                "type": "Mobile Units",
+                "reason": "Can slow with mud and control position",
+                "priority": 0.8
+            },
+            {
+                "type": "Low Defense",
+                "reason": "Strong burst with Baseball Baton",
+                "priority": 0.7
+            }
+        ],
+        "weakAgainst": [
+            {
+                "type": "Ranged Control",
+                "reason": "Can be kited while maintaining mud",
+                "counterplay": [
+                    "use Ground Ball for pressure",
+                    "create mud paths"
+                ]
+            },
+            {
+                "type": "High Mobility",
+                "reason": "Can avoid mud zones efficiently",
+                "counterplay": [
+                    "focus on direct control",
+                    "create overlapping mud"
+                ]
+            }
+        ]
+    },
+    "synergyProfile": {
+        "pairs": [
+            {
+                "unit": "Area Control",
+                "synergy": "Overlapping zone control",
+                "strength": 0.8
+            },
+            {
+                "unit": "Melee Damage",
+                "synergy": "Sets up control for damage dealers",
+                "strength": 0.7
+            }
+        ],
+        "formations": [
+            {
+                "units": [
+                    "Swine Thug",
+                    "Area Control",
+                    "Damage"
+                ],
+                "strategy": "Layered zone control with damage follow-up",
+                "effectiveness": 0.8
+            }
+        ]
+    }
+}

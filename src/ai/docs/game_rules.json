@@ -1,0 +1,103 @@
+{
+    "name": "Ancient Beast",
+    "type": "Turn-based Tactical Combat",
+    "description": "A tactical combat game where players control unique creatures with special abilities in a hex-based arena",
+    
+    "core_mechanics": {
+        "game_flow": {
+            "turn_order": "Queue-based system with initiative influencing order",
+            "rounds": "Each creature gets one turn per round",
+            "actions_per_turn": ["Move", "Use Abilities", "Delay Turn"]
+        },
+        
+        "combat_grid": {
+            "type": "Hexagonal",
+            "movement": {
+                "measurement": "Hex distance",
+                "restrictions": ["Unit size", "Terrain", "Other units"]
+            }
+        },
+
+        "resources": {
+            "unit_count": {
+                "description": "Maximum active units per player (Psyhelm limit)",
+                "configuration": "Set before match start (1-7 units)",
+                "management": "Interplays with plasma cost for materialization",
+                "strategic_impact": [
+                    "Higher counts require more plasma management",
+                    "Lower counts allow for stronger individual units",
+                    "Affects team composition flexibility"
+                ]
+            },
+            "energy": {
+                "description": "Used for abilities",
+                "regeneration": "Meditation value per turn",
+                "management": "Critical for ability usage"
+            },
+            "health": {
+                "description": "Unit survival metric",
+                "regeneration": "Regrowth value per turn",
+                "loss_conditions": ["Damage", "Effects"]
+            },
+            "endurance": {
+                "description": "Protects from fatigue",
+                "effects": ["Enables regrowth", "Enables meditation"],
+                "management": "Must be maintained above fatigue threshold"
+            },
+            "plasma": {
+                "description": "Team resource for unit materialization",
+                "acquisition": "Gained over time and through actions",
+                "uses": ["Summon units", "Plasma shields"],
+                "unit_interaction": "Cost scales with active unit count and unit power"
+            }
+        },
+
+        "abilities": {
+            "types": ["Passive", "Active"],
+            "components": {
+                "range": "Hex distance for targeting",
+                "energy_cost": "Required energy to use",
+                "effects": ["Damage", "Control", "Buffs", "Debuffs"],
+                "upgrades": "Improve after specific usage count"
+            }
+        },
+
+        "damage_types": {
+            "physical": ["Pierce", "Slash", "Crush"],
+            "elemental": ["Shock", "Burn", "Frost"],
+            "special": ["Poison", "Sonic", "Mental"]
+        },
+
+        "status_effects": {
+            "fatigue": "Disables regrowth and meditation",
+            "frozen": "Prevents movement and actions",
+            "materialization_sickness": "Affects newly summoned units"
+        }
+    },
+
+    "victory_conditions": {
+        "primary": "Eliminate all enemy units",
+        "scoring": {
+            "kills": "Points for eliminating enemy units",
+            "ability_upgrades": "Points for improving abilities",
+            "time_bonus": "Points for quick completion"
+        }
+    },
+
+    "strategic_elements": {
+        "positioning": {
+            "importance": "Critical for both offense and defense",
+            "factors": ["Range control", "Zone control", "Line of sight"]
+        },
+        "resource_management": {
+            "unit_count": "Balance between team size and individual unit power",
+            "energy": "Balance between ability usage and conservation",
+            "plasma": "Team resource requiring coordination",
+            "endurance": "Maintain above fatigue threshold"
+        },
+        "unit_synergies": {
+            "team_composition": "Units with complementary abilities",
+            "combo_potential": "Ability interactions between units"
+        }
+    }
+} 

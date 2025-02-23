@@ -6,6 +6,7 @@ import Game from './game';
 import { PreMatchAudioPlayer } from './sound/pre-match-audio';
 import { Fullscreen } from './ui/fullscreen';
 import { buttonSlide } from './ui/button';
+import { OllamaAIIntegration } from './ai/integration/OllamaAIIntegration';
 
 import Connect from './multiplayer/connect';
 import Authenticate from './multiplayer/authenticate';
@@ -19,6 +20,11 @@ import {
 
 // Load the stylesheet
 import './style/main.less';
+
+import { GameState, Unit } from './game/GameState';
+import { UnitProfile } from './ai/types/UnitProfile';
+import { ThreatAnalysis, PositionAnalysis, PatternAnalysis } from './metrics/analysis/types';
+import { ResourceAnalysis } from './metrics/analysis/resource/ResourceAnalyzer';
 
 export type GameConfig = ReturnType<typeof getGameConfig>;
 
@@ -39,14 +45,32 @@ const connect = new Connect(G);
 G.connect = connect;
 
 // Load the abilities
-unitData.forEach(async (creature) => {
-	if (!creature.playable) {
-		return;
-	}
+const loadAbilities = async () => {
+	for (const creature of unitData) {
+		if (!creature.playable) {
+			continue;
+		}
 
-	import(`./abilities/${creature.name.split(' ').join('-')}`).then((generator) =>
-		generator.default(G),
-	);
+		try {
+			const abilityModule = await import(`./abilities/${creature.name.split(' ').join('-')}`);
+			if (abilityModule && typeof abilityModule.default === 'function') {
+				// Initialize the abilities array for this creature if needed
+				if (!G.abilities[creature.id]) {
+					G.abilities[creature.id] = [];
+				}
+				abilityModule.default(G);
+			} else {
+				console.error(`Invalid ability module for ${creature.name}`);
+			}
+		} catch (error) {
+			console.error(`Error loading abilities for ${creature.name}:`, error);
+		}
+	}
+};
+
+// Load abilities sequentially
+loadAbilities().catch(error => {
+	console.error('Error loading abilities:', error);
 });
 
 $j(() => {
@@ -347,6 +371,385 @@ $j(() => {
 
 	$j('#refreshMatchButton').on('click', () => {
 		G.updateLobby();
+	});
+
+	// Add AI recommendation button handler
+	$j('#aiRecommend').on('click', async () => {
+		const game = G; // Current game instance
+		const activeUnit = game.activeCreature;
+		
+		if (!activeUnit) {
+			console.log("No active unit selected");
+			return;
+		}
+
+		// Show loading state
+		$j('#aiRecommend').addClass('disabled');
+		
+		const ai = new OllamaAIIntegration();
+		try {
+			// Get current game state
+			const turnState = game.stateCapture.captureTurnState(game.turn);
+			
+			// Convert TurnState to GameState
+			const gameState: GameState = {
+				turn: game.turn,
+				activeTeam: game.activePlayer.id,
+				units: game.creatures.map(creature => ({
+					id: creature.id,
+					name: creature.name,
+					health: creature.health,
+					maxHealth: creature.stats.health,
+					energy: creature.energy,
+					maxEnergy: creature.stats.energy,
+					endurance: creature.endurance,
+					maxEndurance: creature.stats.endurance,
+					position: {
+						x: creature.x,
+						y: creature.y
+					},
+					abilities: creature.abilities.map(ability => ({
+						name: ability.title,
+						energyCost: ability.costs ? ability.costs.energy : 0,
+						cooldown: ability.timesUsed || 0,
+						currentCooldown: ability.used ? 1 : 0
+					})),
+					effects: creature.effects.map(effect => ({
+						name: effect.name as string,
+						duration: effect.turnLifetime as number,
+						type: effect.debuff ? 'debuff' as const : 'buff' as const
+					}))
+				})),
+				objectives: [],
+				terrain: [],
+				getUnitByProfile(profile: UnitProfile): Unit | undefined {
+					const creature = game.creatures.find(c => c.name === profile.name);
+					if (!creature) return undefined;
+					return {
+						id: creature.id,
+						name: creature.name,
+						health: creature.health,
+						maxHealth: creature.stats.health,
+						energy: creature.energy,
+						maxEnergy: creature.stats.energy,
+						endurance: creature.endurance,
+						maxEndurance: creature.stats.endurance,
+						position: { x: creature.x, y: creature.y },
+						abilities: creature.abilities.map(ability => ({
+							name: ability.title,
+							energyCost: ability.costs ? ability.costs.energy : 0,
+							cooldown: ability.timesUsed || 0,
+							currentCooldown: ability.used ? 1 : 0
+						})),
+						effects: creature.effects.map(effect => ({
+							name: effect.name as string,
+							duration: effect.turnLifetime as number,
+							type: effect.debuff ? 'debuff' as const : 'buff' as const
+						}))
+					};
+				},
+				getUnitById(id: number): Unit | undefined {
+					const creature = game.creatures.find(c => c.id === id);
+					if (!creature) return undefined;
+					return {
+						id: creature.id,
+						name: creature.name,
+						health: creature.health,
+						maxHealth: creature.stats.health,
+						energy: creature.energy,
+						maxEnergy: creature.stats.energy,
+						endurance: creature.endurance,
+						maxEndurance: creature.stats.endurance,
+						position: { x: creature.x, y: creature.y },
+						abilities: creature.abilities.map(ability => ({
+							name: ability.title,
+							energyCost: ability.costs ? ability.costs.energy : 0,
+							cooldown: ability.timesUsed || 0,
+							currentCooldown: ability.used ? 1 : 0
+						})),
+						effects: creature.effects.map(effect => ({
+							name: effect.name as string,
+							duration: effect.turnLifetime as number,
+							type: effect.debuff ? 'debuff' as const : 'buff' as const
+						}))
+					};
+				},
+				getUnitsInRange(pos: { x: number; y: number }, range: number): Unit[] {
+					return game.creatures
+						.filter(c => Math.abs(c.x - pos.x) <= range && Math.abs(c.y - pos.y) <= range)
+						.map(creature => ({
+							id: creature.id,
+							name: creature.name,
+							health: creature.health,
+							maxHealth: creature.stats.health,
+							energy: creature.energy,
+							maxEnergy: creature.stats.energy,
+							endurance: creature.endurance,
+							maxEndurance: creature.stats.endurance,
+							position: { x: creature.x, y: creature.y },
+							abilities: creature.abilities.map(ability => ({
+								name: ability.title,
+								energyCost: ability.costs ? ability.costs.energy : 0,
+								cooldown: ability.timesUsed || 0,
+								currentCooldown: ability.used ? 1 : 0
+							})),
+							effects: creature.effects.map(effect => ({
+								name: effect.name as string,
+								duration: effect.turnLifetime as number,
+								type: effect.debuff ? 'debuff' as const : 'buff' as const
+							}))
+						}));
+				},
+				getObjectivesInRange: () => [],
+				getTerrainAt: () => null,
+				isValidPosition: (pos) => {
+					const grid = game.grid;
+					const width = grid.hexes[0].length;
+					const height = grid.hexes.length;
+					return pos.x >= 0 && pos.x < width && pos.y >= 0 && pos.y < height;
+				},
+				getPathBetween: (start, end) => [],
+				calculateDistance: (pos1, pos2) => Math.max(Math.abs(pos1.x - pos2.x), Math.abs(pos1.y - pos2.y))
+			};
+
+			// Get unit profile and analysis
+			const threatProfile = game.threatAnalyticsManager.getUnitProfile(activeUnit.id);
+			if (!threatProfile) {
+				throw new Error('Could not get unit profile');
+			}
+
+			// Create UnitProfile
+			const profile: UnitProfile = {
+				id: activeUnit.id,
+				name: activeUnit.name,
+				type: activeUnit.type,
+				realm: activeUnit.realm || 'Unknown',
+				size: activeUnit.size,
+				comprehensiveEfficiency: 30,
+				roles: {
+					primary: 'Damage',
+					playstyle: 'Aggressive',
+					AIReasoningPlaystyleContext: 'Default aggressive playstyle'
+				},
+				combatMetrics: {
+					damageOutput: {
+						burstPotential: 0.7,
+						sustainedDamage: 0.6,
+						areaEffect: 0.5,
+						targetSelection: 0.6
+					},
+					controlPower: {
+						immobilization: 0.5,
+						displacement: 0.5,
+						debuffs: 0.5,
+						zoneControl: 0.5
+					},
+					survivability: {
+						healthPool: 0.6,
+						defensiveAbilities: 0.5,
+						mobilityOptions: 0.5,
+						recoveryPotential: 0.5
+					},
+					utility: {
+						resourceGeneration: 0.5,
+						teamSupport: 0.5,
+						mapControl: 0.5,
+						comboEnablement: 0.5
+					}
+				},
+				resourceProfile: {
+					energyUsage: {
+						optimal: 50,
+						critical: 20,
+						regeneration: 10
+					},
+					enduranceManagement: {
+						safeThreshold: 0.7,
+						riskThreshold: 0.3,
+						recoveryPriority: 0.5
+					}
+				},
+				positioningProfile: {
+					optimalRange: 2,
+					formationPlacement: {
+						frontline: 0.5,
+						midline: 0.5,
+						backline: 0.5
+					},
+					zonePreferences: {
+						center: 0.5,
+						flank: 0.5,
+						defensive: 0.5
+					}
+				},
+				abilityProfile: {},
+				matchupProfile: {
+					strongAgainst: [],
+					weakAgainst: []
+				},
+				synergyProfile: {
+					pairs: [],
+					formations: []
+				}
+			};
+
+			const vulnerabilities = game.threatAnalyticsManager.getUnitVulnerabilities(activeUnit.id);
+			const patterns = game.threatAnalyticsManager.getThreatPatterns();
+
+			// Construct analysis object
+			const analysis = {
+				threat: {
+					effectiveThreat: vulnerabilities.length > 0 ? 0.8 : 0.4,
+					damageEstimate: 0,
+					controlImpact: 0,
+					positionalThreat: 0,
+					resourceThreat: 0,
+					details: {
+						willKill: false,
+						willDisable: false,
+						willTrapTarget: false,
+						willForceMovement: false,
+						synergiesWithTeam: false
+					}
+				},
+				position: {
+					value: 0.5,
+					factors: {
+						safety: 0.5,
+						control: 0.5,
+						tactical: 0.5,
+						mobility: 0.5
+					},
+					recommendations: {}
+				},
+				resource: {
+					efficiency: {
+						energy: { usage: activeUnit.energy / activeUnit.stats.energy },
+						endurance: { usage: activeUnit.endurance / activeUnit.stats.endurance }
+					}
+				},
+				pattern: {
+					patterns,
+					confidence: 0.7,
+					frequency: 0.6,
+					recommendations: []
+				}
+			};
+
+			// Get available options from active creature's abilities
+			const availableOptions = activeUnit.abilities
+				.filter(ability => !ability.used)
+				.map(ability => ({
+					type: 'ability' as const,
+					data: {
+						id: ability.id,
+						name: ability.title,
+						cost: ability.costs,
+						requirements: ability.requirements
+					},
+					preliminaryScore: 0.5
+				}));
+
+			const fullAnalysis = {
+				threat: analysis.threat,
+				position: analysis.position,
+				resource: {
+					efficiency: {
+						energy: { 
+							usage: analysis.resource.efficiency.energy.usage,
+							regeneration: 0,
+							waste: 0
+						},
+						plasma: {
+							usage: 0,
+							teamShare: 0,
+							advantage: 0
+						},
+						endurance: {
+							usage: analysis.resource.efficiency.endurance.usage,
+							recovery: 0,
+							risk: 0
+						}
+					},
+					timing: {
+						energyTiming: 0,
+						plasmaTiming: 0,
+						enduranceTiming: 0
+					},
+					forecast: {
+						energyForecast: 0,
+						plasmaForecast: 0,
+						fatigueForecast: false
+					},
+					suggestions: {
+						immediate: [],
+						strategic: []
+					}
+				},
+				pattern: analysis.pattern
+			};
+
+			const result = await ai.getStrategicDecision(
+				gameState,
+				profile,
+				fullAnalysis,
+				availableOptions
+			);
+
+			// Create recommendation display
+			const recommendationHtml = `
+				<div id="ai-recommendations" class="framed-modal__wrapper">
+					<div class="framed-modal">
+						<div class="framed-modal__return">
+							<button class="close-button"></button>
+						</div>
+						<h3>AI Strategic Recommendations</h3>
+						${result.recommendedActions.map((action, index) => `
+							<div class="recommendation">
+								<h4>Option ${index + 1}: ${action.steps[0].data.description}</h4>
+								<div class="details">
+									<p><strong>Outcome:</strong> ${action.expectedOutcome.outcome || 'No specific outcome'}</p>
+									<p><strong>Cost:</strong> Energy: ${action.expectedOutcome.resourceCost.energy}, Endurance: ${action.expectedOutcome.resourceCost.endurance}${action.expectedOutcome.resourceCost.plasma ? `, Plasma: ${action.expectedOutcome.resourceCost.plasma}` : ''}</p>
+									<p><strong>Reasoning:</strong> ${action.reasoning[0]}</p>
+								</div>
+							</div>
+						`).join('')}
+					</div>
+				</div>`;
+
+			// Add modal to UI if it doesn't exist
+			if (!$j('#ai-recommendations').length) {
+				$j('#ui').append(recommendationHtml);
+			} else {
+				$j('#ai-recommendations').replaceWith(recommendationHtml);
+			}
+
+			// Show modal and set up close handler
+			$j('#ai-recommendations')
+				.removeClass('hide')
+				.find('.close-button')
+				.off('click')  // Remove any existing handlers
+				.on('click', function() {
+					$j('#ai-recommendations').addClass('hide');
+				});
+
+		} catch (error) {
+			console.error('Error getting AI recommendations:', error);
+			alert('Error getting AI recommendations: ' + error.message);
+		} finally {
+			// Reset button state
+			$j('#aiRecommend').removeClass('disabled');
+		}
+	});
+
+	$j('#testAI').on('click', async () => {
+		const ai = new OllamaAIIntegration();
+		try {
+			const response = await ai.getResponse("what's it like in space?");
+			alert(response);
+		} catch (error) {
+			alert('Error testing AI connection: ' + error.message);
+		}
 	});
 });
 

@@ -232,7 +232,7 @@ export class MetricsLogger {
 		try {
 			const key = `${MetricsLogger.STORAGE_KEY_PREFIX}${this.currentGameLog.gameId}`;
 			localStorage.setItem(key, JSON.stringify(this.currentGameLog));
-		} catch (error) {
+			} catch (error) {
 			console.warn(`[MetricsLogger] Failed to save game log: ${error.message}`);
 			this.cleanOldLogs();
 		}

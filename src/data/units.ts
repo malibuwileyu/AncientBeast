@@ -29,7 +29,7 @@ type Stats = {
 	mental: number;
 };
 
-type UnitDataStructure = readonly {
+export interface UnitData {
 	id: number;
 	name: string;
 	playable: boolean;
@@ -43,6 +43,7 @@ type UnitDataStructure = readonly {
 	movementType?: Movement;
 	display?: UnitDisplayInfo;
 	set?: 'α' | 'β';
+	cost: number;  // Make cost required again since we have the mapping
 
 	ability_info: readonly {
 		title: string;
@@ -79,7 +80,18 @@ type UnitDataStructure = readonly {
 		range?: { regular: number; upgraded: number; minimum?: number };
 		animation_data?: { duration: number; delay: number };
 	}[];
-}[];
+}
+
+export type DeepMutable<T> = {
+    -readonly [P in keyof T]: T[P] extends ReadonlyArray<infer U>
+        ? DeepMutable<U>[]
+        : T[P] extends object
+        ? DeepMutable<T[P]>
+        : T[P]
+};
+
+export type UnitDataReadonly = typeof unitData[number];
+export type UnitDataMutable = DeepMutable<UnitData>;
 
 export const unitData = [
 	{
@@ -172,6 +184,7 @@ export const unitData = [
 				},
 			},
 		],
+		cost: 0,  // Dark Priest has no cost
 	},
 	{
 		id: 1,
@@ -255,6 +268,7 @@ export const unitData = [
 				},
 			},
 		],
+		cost: 0,  // Bounty Hunter has no cost
 	},
 	{
 		id: 2,
@@ -322,6 +336,7 @@ export const unitData = [
 				},
 			},
 		],
+		cost: 0,  // Razorback has no cost
 	},
 	{
 		id: 3,
@@ -423,6 +438,7 @@ export const unitData = [
 				},
 			},
 		],
+		cost: 0,  // Uncle Fungus has no cost
 	},
 	{
 		id: 4,
@@ -524,6 +540,7 @@ export const unitData = [
 				},
 			},
 		],
+		cost: 0,  // Infernal has no cost
 	},
 	{
 		id: 5,
@@ -625,6 +642,7 @@ export const unitData = [
 				},
 			},
 		],
+		cost: 0,  // Impaler has no cost
 	},
 	{
 		id: 6,
@@ -737,6 +755,7 @@ export const unitData = [
 				},
 			},
 		],
+		cost: 0,  // Vehemoth has no cost
 	},
 	{
 		id: 7,
@@ -834,6 +853,7 @@ export const unitData = [
 				},
 			},
 		],
+		cost: 0,  // Abolished has no cost
 	},
 	{
 		id: 8,
@@ -896,6 +916,7 @@ export const unitData = [
 				},
 			},
 		],
+		cost: 0,  // Horn Head has no cost
 	},
 	{
 		id: 9,
@@ -906,24 +927,24 @@ export const unitData = [
 		size: 2,
 		set: 'α',
 		stats: {
-			health: 175,
-			regrowth: 2,
-			endurance: 70,
-			energy: 93,
-			meditation: 39,
-			initiative: 40,
-			offense: 10,
-			defense: 10,
-			movement: 1,
-			pierce: 5,
-			slash: 4,
-			crush: 3,
-			shock: 2,
-			burn: 1,
-			frost: 10,
-			poison: 5,
-			sonic: 5,
-			mental: 15,
+				health: 175,
+				regrowth: 2,
+				endurance: 70,
+				energy: 93,
+				meditation: 39,
+				initiative: 40,
+				offense: 10,
+				defense: 10,
+				movement: 1,
+				pierce: 5,
+				slash: 4,
+				crush: 3,
+				shock: 2,
+				burn: 1,
+				frost: 10,
+				poison: 5,
+				sonic: 5,
+				mental: 15,
 		},
 		drop: {
 			name: 'milk bottle',
@@ -1000,6 +1021,7 @@ export const unitData = [
 				},
 			},
 		],
+		cost: 0,  // Knightmare has no cost
 	},
 	{
 		id: 10,
@@ -1071,6 +1093,7 @@ export const unitData = [
 				},
 			},
 		],
+		cost: 0,  // Troglodyte has no cost
 	},
 	{
 		id: 11,
@@ -1143,6 +1166,7 @@ export const unitData = [
 				},
 			},
 		],
+		cost: 0,  // Toxic Shroom has no cost
 	},
 	{
 		id: 12,
@@ -1238,6 +1262,7 @@ export const unitData = [
 				},
 			},
 		],
+		cost: 0,  // Snow Bunny has no cost
 	},
 	{
 		id: 13,
@@ -1311,6 +1336,7 @@ export const unitData = [
 				},
 			},
 		],
+		cost: 0,  // Swampler has no cost
 	},
 	{
 		id: 14,
@@ -1321,24 +1347,24 @@ export const unitData = [
 		size: 1,
 		set: 'α',
 		stats: {
-			health: 70,
-			regrowth: 5,
-			endurance: 50,
-			energy: 70,
-			meditation: 43,
-			initiative: 35,
-			offense: 4,
-			defense: 6,
-			movement: 3,
-			pierce: 8,
-			slash: 3,
-			crush: 8,
-			shock: 3,
-			burn: 2,
-			frost: 3,
-			poison: 8,
-			sonic: 12,
-			mental: 4,
+				health: 70,
+				regrowth: 5,
+				endurance: 50,
+				energy: 70,
+				meditation: 43,
+				initiative: 35,
+				offense: 4,
+				defense: 6,
+				movement: 3,
+				pierce: 8,
+				slash: 3,
+				crush: 8,
+				shock: 3,
+				burn: 2,
+				frost: 3,
+				poison: 8,
+				sonic: 12,
+				mental: 4,
 		},
 		drop: {
 			name: 'cherry',
@@ -1406,6 +1432,7 @@ export const unitData = [
 				},
 			},
 		],
+		cost: 0,  // Gumble has no cost
 	},
 	{
 		id: 15,
@@ -1473,6 +1500,7 @@ export const unitData = [
 				},
 			},
 		],
+		cost: 0,  // Cycloper has no cost
 	},
 	{
 		id: 16,
@@ -1540,6 +1568,7 @@ export const unitData = [
 				},
 			},
 		],
+		cost: 0,  // Vulcan has no cost
 	},
 	{
 		id: 17,
@@ -1607,6 +1636,7 @@ export const unitData = [
 				},
 			},
 		],
+		cost: 0,  // Spikes has no cost
 	},
 	{
 		id: 18,
@@ -1674,6 +1704,7 @@ export const unitData = [
 				},
 			},
 		],
+		cost: 0,  // Sarcophag has no cost
 	},
 	{
 		id: 19,
@@ -1741,6 +1772,7 @@ export const unitData = [
 				},
 			},
 		],
+		cost: 0,  // Miss Creeper has no cost
 	},
 	{
 		id: 20,
@@ -1751,24 +1783,24 @@ export const unitData = [
 		size: 3,
 		set: 'α',
 		stats: {
-			health: 220,
-			regrowth: 5,
-			endurance: 55,
-			energy: 50,
-			meditation: 4,
-			initiative: 65,
-			offense: 10,
-			defense: 6,
-			movement: 3,
-			pierce: 5,
-			slash: 7,
-			crush: 6,
-			shock: 8,
-			burn: 1,
-			frost: 20,
-			poison: 5,
-			sonic: 15,
-			mental: 10,
+				health: 220,
+				regrowth: 5,
+				endurance: 55,
+				energy: 50,
+				meditation: 4,
+				initiative: 65,
+				offense: 10,
+				defense: 6,
+				movement: 3,
+				pierce: 5,
+				slash: 7,
+				crush: 6,
+				shock: 8,
+				burn: 1,
+				frost: 20,
+				poison: 5,
+				sonic: 15,
+				mental: 10,
 		},
 		animation: {
 			walk_speed: 500,
@@ -1795,6 +1827,7 @@ export const unitData = [
 				info: '35 frost damage over 7 hexagons.',
 			},
 		],
+		cost: 0,  // Kraken has no cost
 	},
 	{
 		id: 21,
@@ -1861,6 +1894,7 @@ export const unitData = [
 				},
 			},
 		],
+		cost: 0,  // Flayed has no cost
 	},
 	{
 		id: 22,
@@ -1944,6 +1978,7 @@ export const unitData = [
 				},
 			},
 		],
+		cost: 0,  // Asher has no cost
 	},
 	{
 		id: 23,
@@ -2011,6 +2046,7 @@ export const unitData = [
 				},
 			},
 		],
+		cost: 0,  // Metalist has no cost
 	},
 	{
 		id: 24,
@@ -2084,6 +2120,7 @@ export const unitData = [
 				},
 			},
 		],
+		cost: 0,  // Living Armor has no cost
 	},
 	{
 		id: 25,
@@ -2153,6 +2190,7 @@ export const unitData = [
 				},
 			},
 		],
+		cost: 0,  // Mr. Stitches has no cost
 	},
 	{
 		id: 26,
@@ -2220,6 +2258,7 @@ export const unitData = [
 				},
 			},
 		],
+		cost: 0,  // Moss Hound has no cost
 	},
 	{
 		id: 27,
@@ -2287,6 +2326,7 @@ export const unitData = [
 				},
 			},
 		],
+		cost: 0,  // Blue Shrimp has no cost
 	},
 	{
 		id: 28,
@@ -2373,6 +2413,7 @@ export const unitData = [
 				},
 			},
 		],
+		cost: 0,  // Stomper has no cost
 	},
 	{
 		id: 29,
@@ -2450,6 +2491,7 @@ export const unitData = [
 				},
 			},
 		],
+		cost: 0,  // Gilded Maiden has no cost
 	},
 	{
 		id: 30,
@@ -2528,6 +2570,7 @@ export const unitData = [
 				},
 			},
 		],
+		cost: 0,  // Papa Eggplant has no cost
 	},
 	{
 		id: 31,
@@ -2624,6 +2667,7 @@ export const unitData = [
 				},
 			},
 		],
+		cost: 0,  // Cyber Wolf has no cost
 	},
 	{
 		id: 32,
@@ -2691,6 +2735,7 @@ export const unitData = [
 				},
 			},
 		],
+		cost: 0,  // Deep Beauty has no cost
 	},
 	{
 		id: 33,
@@ -2771,6 +2816,7 @@ export const unitData = [
 				},
 			},
 		],
+		cost: 0,  // Golden Wyrm has no cost
 	},
 	{
 		id: 34,
@@ -2843,6 +2889,7 @@ export const unitData = [
 				},
 			},
 		],
+		cost: 0,  // Royal Guard has no cost
 	},
 	{
 		id: 35,
@@ -2918,6 +2965,7 @@ export const unitData = [
 				},
 			},
 		],
+		cost: 0,  // Greedy Knight has no cost
 	},
 	{
 		id: 36,
@@ -2987,6 +3035,7 @@ export const unitData = [
 				},
 			},
 		],
+		cost: 0,  // Vertigo has no cost
 	},
 	{
 		id: 37,
@@ -3084,6 +3133,7 @@ export const unitData = [
 				},
 			},
 		],
+		cost: 0,  // Swine Thug has no cost
 	},
 	{
 		id: 38,
@@ -3151,6 +3201,7 @@ export const unitData = [
 				},
 			},
 		],
+		cost: 0,  // Crystalis has no cost
 	},
 	{
 		id: 39,
@@ -3251,6 +3302,7 @@ export const unitData = [
 				},
 			},
 		],
+		cost: 0,  // Headless has no cost
 	},
 	{
 		id: 40,
@@ -3347,6 +3399,7 @@ export const unitData = [
 				},
 			},
 		],
+		cost: 0,  // Nutcase has no cost
 	},
 	{
 		id: 41,
@@ -3405,6 +3458,7 @@ export const unitData = [
 				upgrade: '+2 more movement points.',
 			},
 		],
+		cost: 0,  // Mangler has no cost
 	},
 	{
 		id: 42,
@@ -3494,6 +3548,7 @@ export const unitData = [
 				},
 			},
 		],
+		cost: 0,  // Batmadillo has no cost
 	},
 	{
 		id: 43,
@@ -3561,6 +3616,7 @@ export const unitData = [
 				},
 			},
 		],
+		cost: 0,  // Volpyr has no cost
 	},
 	{
 		id: 44,
@@ -3653,6 +3709,7 @@ export const unitData = [
 				},
 			},
 		],
+		cost: 0,  // Scavenger has no cost
 	},
 	{
 		id: 45,
@@ -3741,6 +3798,7 @@ export const unitData = [
 				},
 			},
 		],
+		cost: 0,  // Chimera has no cost
 	},
 	{
 		id: 46,
@@ -3751,24 +3809,24 @@ export const unitData = [
 		size: 2,
 		set: 'α',
 		stats: {
-			health: 186,
-			regrowth: 4,
-			endurance: 80,
-			energy: 70,
-			meditation: 20,
-			initiative: 30,
-			offense: 8,
-			defense: 21,
-			movement: 4,
-			pierce: 10,
-			slash: 10,
-			crush: 8,
-			shock: 9,
-			burn: 2,
-			frost: 2,
-			poison: 9,
-			sonic: 2,
-			mental: 1,
+				health: 186,
+				regrowth: 4,
+				endurance: 80,
+				energy: 70,
+				meditation: 20,
+				initiative: 30,
+				offense: 8,
+				defense: 21,
+				movement: 4,
+				pierce: 10,
+				slash: 10,
+				crush: 8,
+				shock: 9,
+				burn: 2,
+				frost: 2,
+				poison: 9,
+				sonic: 2,
+				mental: 1,
 		},
 		animation: {
 			walk_speed: 500,
@@ -3808,6 +3866,7 @@ export const unitData = [
 				},
 			},
 		],
+		cost: 0,  // Scorpius has no cost
 	},
 	{
 		id: 47,
@@ -3871,6 +3930,7 @@ export const unitData = [
 				},
 			},
 		],
+		cost: 0,  // Aegis has no cost
 	},
 	{
 		id: 48,
@@ -3881,24 +3941,24 @@ export const unitData = [
 		size: 3,
 		set: 'α',
 		stats: {
-			health: 214,
-			regrowth: 4,
-			endurance: 60,
-			energy: 80,
-			meditation: 5,
-			initiative: 40,
-			offense: 9,
-			defense: 8,
-			movement: 3,
-			pierce: 5,
-			slash: 6,
-			crush: 7,
-			shock: 7,
-			burn: 5,
-			frost: 5,
-			poison: 4,
-			sonic: 3,
-			mental: 10,
+				health: 214,
+				regrowth: 4,
+				endurance: 60,
+				energy: 80,
+				meditation: 5,
+				initiative: 40,
+				offense: 9,
+				defense: 8,
+				movement: 3,
+				pierce: 5,
+				slash: 6,
+				crush: 7,
+				shock: 7,
+				burn: 5,
+				frost: 5,
+				poison: 4,
+				sonic: 3,
+				mental: 10,
 		},
 		animation: {
 			walk_speed: 500,
@@ -3906,9 +3966,9 @@ export const unitData = [
 		ability_info: [
 			{
 				title: 'Hard Headed',
-				desc: 'Frontal attacks cause way less damage.',
-				info: '10 points frontal hit damage reduction',
-				upgrade: '',
+					desc: 'Frontal attacks cause way less damage.',
+					info: '10 points frontal hit damage reduction',
+					upgrade: '',
 			},
 			{
 				title: 'Stiff Scissors',
@@ -3938,6 +3998,7 @@ export const unitData = [
 				},
 			},
 		],
+		cost: 0,  // Satyr has no cost
 	},
 	{
 		id: 49,
@@ -4005,6 +4066,7 @@ export const unitData = [
 				},
 			},
 		],
+		cost: 0,  // Lavamander has no cost
 	},
 	{
 		id: 50,
@@ -4078,5 +4140,6 @@ export const unitData = [
 				},
 			},
 		],
+		cost: 0,  // Shadow Leech has no cost
 	},
-] as const satisfies UnitDataStructure;
+] as const as readonly UnitData[];

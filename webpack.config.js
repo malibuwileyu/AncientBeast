@@ -149,6 +149,25 @@ module.exports = (env, argv) => {
 			port: 8080,
 			proxy: {
 				'/api': '159.65.232.104:7350',
+				'/ollama/api/generate': {
+					target: 'http://localhost:11434',
+					pathRewrite: { '^/ollama/api/generate': '/api/generate' },
+					changeOrigin: true,
+					secure: false,
+					onProxyReq: (proxyReq) => {
+						// Log the proxied request for debugging
+						console.log('Proxying Ollama request:', proxyReq.path);
+					},
+					onProxyRes: (proxyRes) => {
+						// Log the proxy response for debugging
+						console.log('Ollama proxy response status:', proxyRes.statusCode);
+					},
+					headers: {
+						'Access-Control-Allow-Origin': '*',
+						'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, PATCH, OPTIONS',
+						'Access-Control-Allow-Headers': 'X-Requested-With, content-type, Authorization'
+					}
+				}
 			},
 			allowedHosts: ['localhost', '.gitpod.io'],
 		},
@@ -166,5 +185,29 @@ module.exports = (env, argv) => {
 				defaults: './.env.example',
 			}),
 		],
+		optimization: {
+			moduleIds: 'deterministic',
+			runtimeChunk: 'single',
+			splitChunks: {
+				cacheGroups: {
+					vendor: {
+						test: /[\\/]node_modules[\\/]/,
+						name: 'vendors',
+						chunks: 'all',
+					},
+				},
+			},
+		},
+		performance: {
+			hints: production ? 'warning' : false,
+			maxEntrypointSize: 512000,
+			maxAssetSize: 512000
+		},
+		cache: {
+			type: 'filesystem',
+			buildDependencies: {
+				config: [__filename]
+			}
+		},
 	};
 };

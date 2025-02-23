@@ -1,0 +1,195 @@
+{
+    "id": 5,
+    "name": "Impaler",
+    "type": "S5",
+    "realm": "Sloth",
+    "size": 3,
+    "cost": 8,
+    "comprehensiveEfficiency": 34,
+    "roles": {
+        "primary": "Control",
+        "secondary": "Damage",
+        "playstyle": "Aggressive",
+        "AIReasoningPlaystyleContext": "As Impaler, I focus on high mobility and mixed damage types with strong control elements. My Electrified Hair passive helps convert shock damage into energy. I should use Hasted Javelin for high pierce damage and movement reset. Poisonous Vine provides strong zone control and punishes movement. Chain Lightning gives me good AoE shock damage with arcing potential. I excel at energy management through shock conversion and mobility through Hasted Javelin. I should maintain good positioning to maximize Chain Lightning arcs."
+    },
+    "combatMetrics": {
+        "damageOutput": {
+            "burstPotential": 0.8,
+            "sustainedDamage": 0.6,
+            "areaEffect": 0.7,
+            "targetSelection": 0.8
+        },
+        "controlPower": {
+            "immobilization": 0.7,
+            "displacement": 0.0,
+            "debuffs": 0.6,
+            "zoneControl": 0.7
+        },
+        "survivability": {
+            "healthPool": 0.7,
+            "defensiveAbilities": 0.5,
+            "mobilityOptions": 0.8,
+            "recoveryPotential": 0.8
+        },
+        "utility": {
+            "resourceGeneration": 0.8,
+            "teamSupport": 0.4,
+            "mapControl": 0.7,
+            "comboEnablement": 0.6
+        }
+    },
+    "resourceProfile": {
+        "energyUsage": {
+            "optimal": 60,
+            "critical": 25,
+            "regeneration": 31
+        },
+        "enduranceManagement": {
+            "safeThreshold": 25,
+            "riskThreshold": 15,
+            "recoveryPriority": 0.5
+        }
+    },
+    "positioningProfile": {
+        "optimalRange": 2,
+        "formationPlacement": {
+            "frontline": 0.6,
+            "midline": 0.8,
+            "backline": 0.4
+        },
+        "zonePreferences": {
+            "center": 0.7,
+            "flank": 0.6,
+            "defensive": 0.5
+        }
+    },
+    "abilityProfile": {
+        "Electrified Hair": {
+            "priority": 0.8,
+            "energyThreshold": 0,
+            "setupRequired": false,
+            "comboFollowup": [],
+            "comboPrecursor": [],
+            "conditions": {
+                "use": [
+                    "Automatically converts shock damage to energy",
+                    "When upgraded, overflow energy heals",
+                    "Position to take advantageous shock damage"
+                ],
+                "avoid": [
+                    "Taking shock damage when energy is full",
+                    "When healing not needed if upgraded"
+                ]
+            }
+        },
+        "Hasted Javelin": {
+            "priority": 0.9,
+            "energyThreshold": 25,
+            "setupRequired": false,
+            "comboFollowup": [
+                "Chain Lightning"
+            ],
+            "comboPrecursor": [],
+            "conditions": {
+                "use": [
+                    "When movement reset needed",
+                    "Against high priority targets",
+                    "When upgraded and target is vulnerable to poison",
+                    "To reposition after Chain Lightning"
+                ],
+                "avoid": [
+                    "When movement not needed",
+                    "When energy needed for control",
+                    "When target has high pierce resistance"
+                ]
+            }
+        },
+        "Poisonous Vine": {
+            "priority": 0.8,
+            "energyThreshold": 30,
+            "setupRequired": true,
+            "comboFollowup": [
+                "Chain Lightning"
+            ],
+            "comboPrecursor": [],
+            "conditions": {
+                "use": [
+                    "To control key zones",
+                    "Against mobile targets",
+                    "When upgraded for indefinite control",
+                    "To protect against flanking"
+                ],
+                "avoid": [
+                    "Against stationary targets",
+                    "When target has high poison resistance",
+                    "When immediate damage needed more"
+                ]
+            }
+        },
+        "Chain Lightning": {
+            "priority": 0.8,
+            "energyThreshold": 40,
+            "setupRequired": true,
+            "comboFollowup": [],
+            "comboPrecursor": [
+                "Poisonous Vine"
+            ],
+            "conditions": {
+                "use": [
+                    "When multiple enemies are adjacent",
+                    "When upgraded to avoid damaging allies",
+                    "After positioning enemies with vine",
+                    "For maximum arc potential"
+                ],
+                "avoid": [
+                    "When allies would be hit (unless upgraded)",
+                    "When single target damage better",
+                    "When energy needed for mobility"
+                ]
+            }
+        }
+    },
+    "matchupProfile": {
+        "strongAgainst": [
+            {
+                "type": "Mobile Units",
+                "reason": "Can control with Poisonous Vine",
+                "priority": 0.8
+            },
+            {
+                "type": "Groups",
+                "reason": "Strong Chain Lightning value",
+                "priority": 0.7
+            },
+            {
+                "type": "Shock Damage",
+                "reason": "Benefits from shock damage conversion",
+                "priority": 0.6
+            }
+        ],
+        "weakAgainst": [
+            {
+                "type": "High Pierce Resistance",
+                "reason": "Reduces Hasted Javelin effectiveness",
+                "counterplay": [
+                    "Focus on poison and shock damage",
+                    "Use mobility advantage",
+                    "Control with vines instead of damage"
+                ]
+            },
+            {
+                "type": "Spread Formation",
+                "reason": "Reduces Chain Lightning effectiveness",
+                "counterplay": [
+                    "Use Poisonous Vine for single target",
+                    "Focus on mobility and positioning",
+                    "Force clumping with zone control"
+                ]
+            }
+        ]
+    },
+    "synergyProfile": {
+        "pairs": [],
+        "formations": []
+    }
+}

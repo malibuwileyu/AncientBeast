@@ -1,0 +1,163 @@
+{
+    "id": 8,
+    "name": "Scavenger",
+    "type": "G8",
+    "realm": "Underworld",
+    "size": 2,
+    "comprehensiveEfficiency": 31,
+    "cost": 5,
+    "roles": {
+        "primary": "Support",
+        "secondary": "Control",
+        "playstyle": "Utility",
+        "AIReasoningPlaystyleContext": "Resource manipulation and battlefield control through scavenging mechanics"
+    },
+    "combatMetrics": {
+        "damageOutput": {
+            "burstPotential": 0.4,
+            "sustainedDamage": 0.5,
+            "areaEffect": 0.6,
+            "targetSelection": 0.8
+        },
+        "controlPower": {
+            "immobilization": 0.5,
+            "displacement": 0.7,
+            "debuffs": 0.6,
+            "zoneControl": 0.7
+        },
+        "survivability": {
+            "healthPool": 0.6,
+            "defensiveAbilities": 0.5,
+            "mobilityOptions": 0.4,
+            "recoveryPotential": 0.7
+        },
+        "utility": {
+            "resourceGeneration": 0.9,
+            "teamSupport": 0.8,
+            "mapControl": 0.6,
+            "comboEnablement": 0.5
+        }
+    },
+    "resourceProfile": {
+        "energyUsage": {
+            "optimal": 40,
+            "critical": 20,
+            "regeneration": 0.25
+        },
+        "enduranceManagement": {
+            "safeThreshold": 0.6,
+            "riskThreshold": 0.3,
+            "recoveryPriority": 0.7
+        }
+    },
+    "positioningProfile": {
+        "optimalRange": 3,
+        "formationPlacement": {
+            "frontline": 0.4,
+            "midline": 0.7,
+            "backline": 0.5
+        },
+        "zonePreferences": {
+            "center": 0.6,
+            "flank": 0.4,
+            "defensive": 0.7
+        }
+    },
+    "abilityProfile": {
+        "scavenge": {
+            "priority": 0.9,
+            "energyThreshold": 15,
+            "setupRequired": false,
+            "comboFollowup": [
+                "distribute"
+            ],
+            "comboPrecursor": [],
+            "conditions": {
+                "use": [
+                    "resourcesAvailable",
+                    "teamNeedsResources"
+                ],
+                "avoid": [
+                    "underAttack",
+                    "isolated"
+                ]
+            }
+        },
+        "distribute": {
+            "priority": 0.8,
+            "energyThreshold": 25,
+            "setupRequired": true,
+            "comboFollowup": [],
+            "comboPrecursor": [
+                "scavenge"
+            ],
+            "conditions": {
+                "use": [
+                    "alliesNearby",
+                    "resourcesCollected"
+                ],
+                "avoid": [
+                    "lowHealth",
+                    "enemyPressure"
+                ]
+            }
+        }
+    },
+    "matchupProfile": {
+        "strongAgainst": [
+            {
+                "type": "Resource-dependent",
+                "reason": "Can deny and steal resources",
+                "priority": 0.9
+            },
+            {
+                "type": "Sustained Damage",
+                "reason": "Can outlast through resource management",
+                "priority": 0.7
+            }
+        ],
+        "weakAgainst": [
+            {
+                "type": "Burst Damage",
+                "reason": "Vulnerable during scavenging",
+                "counterplay": [
+                    "stay with team",
+                    "time scavenging carefully"
+                ]
+            },
+            {
+                "type": "Mobile Assassin",
+                "reason": "Can be caught out of position",
+                "counterplay": [
+                    "maintain defensive positioning",
+                    "use team protection"
+                ]
+            }
+        ]
+    },
+    "synergyProfile": {
+        "pairs": [
+            {
+                "unit": "Dark Priest",
+                "synergy": "Resource amplification",
+                "strength": 0.85
+            },
+            {
+                "unit": "Nutcase",
+                "synergy": "Protected scavenging zones",
+                "strength": 0.75
+            }
+        ],
+        "formations": [
+            {
+                "units": [
+                    "Scavenger",
+                    "Dark Priest",
+                    "Nutcase"
+                ],
+                "strategy": "Resource control and zone denial",
+                "effectiveness": 0.85
+            }
+        ]
+    }
+}

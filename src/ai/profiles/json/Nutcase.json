@@ -1,0 +1,163 @@
+{
+    "id": 7,
+    "name": "Nutcase",
+    "type": "G7",
+    "realm": "Underworld",
+    "size": 1,
+    "comprehensiveEfficiency": 32,
+    "cost": 4,
+    "roles": {
+        "primary": "Control",
+        "secondary": "Damage",
+        "playstyle": "Utility",
+        "AIReasoningPlaystyleContext": "Specializes in area denial and trap-based control with moderate damage potential"
+    },
+    "combatMetrics": {
+        "damageOutput": {
+            "burstPotential": 0.6,
+            "sustainedDamage": 0.5,
+            "areaEffect": 0.8,
+            "targetSelection": 0.7
+        },
+        "controlPower": {
+            "immobilization": 0.7,
+            "displacement": 0.6,
+            "debuffs": 0.5,
+            "zoneControl": 0.9
+        },
+        "survivability": {
+            "healthPool": 0.5,
+            "defensiveAbilities": 0.4,
+            "mobilityOptions": 0.6,
+            "recoveryPotential": 0.3
+        },
+        "utility": {
+            "resourceGeneration": 0.4,
+            "teamSupport": 0.6,
+            "mapControl": 0.8,
+            "comboEnablement": 0.7
+        }
+    },
+    "resourceProfile": {
+        "energyUsage": {
+            "optimal": 45,
+            "critical": 25,
+            "regeneration": 0.2
+        },
+        "enduranceManagement": {
+            "safeThreshold": 0.7,
+            "riskThreshold": 0.4,
+            "recoveryPriority": 0.5
+        }
+    },
+    "positioningProfile": {
+        "optimalRange": 5,
+        "formationPlacement": {
+            "frontline": 0.2,
+            "midline": 0.8,
+            "backline": 0.6
+        },
+        "zonePreferences": {
+            "center": 0.7,
+            "flank": 0.5,
+            "defensive": 0.6
+        }
+    },
+    "abilityProfile": {
+        "trapMaster": {
+            "priority": 0.9,
+            "energyThreshold": 25,
+            "setupRequired": true,
+            "comboFollowup": [
+                "nutShot"
+            ],
+            "comboPrecursor": [],
+            "conditions": {
+                "use": [
+                    "chokepoint",
+                    "predictedMovement"
+                ],
+                "avoid": [
+                    "exposed",
+                    "immediate_danger"
+                ]
+            }
+        },
+        "nutShot": {
+            "priority": 0.7,
+            "energyThreshold": 20,
+            "setupRequired": false,
+            "comboFollowup": [],
+            "comboPrecursor": [
+                "trapMaster"
+            ],
+            "conditions": {
+                "use": [
+                    "enemyTrapped",
+                    "clearShot"
+                ],
+                "avoid": [
+                    "lowEnergy",
+                    "betterTargetAvailable"
+                ]
+            }
+        }
+    },
+    "matchupProfile": {
+        "strongAgainst": [
+            {
+                "type": "Melee",
+                "reason": "Can control approach paths",
+                "priority": 0.8
+            },
+            {
+                "type": "Mobile",
+                "reason": "Can punish movement patterns",
+                "priority": 0.7
+            }
+        ],
+        "weakAgainst": [
+            {
+                "type": "Ranged",
+                "reason": "Can be outranged and pressured",
+                "counterplay": [
+                    "use cover",
+                    "bait into traps"
+                ]
+            },
+            {
+                "type": "Area Control",
+                "reason": "Competes for space control",
+                "counterplay": [
+                    "focus on different zones",
+                    "coordinate trap placement"
+                ]
+            }
+        ]
+    },
+    "synergyProfile": {
+        "pairs": [
+            {
+                "unit": "Headless",
+                "synergy": "Trap and fear combination",
+                "strength": 0.75
+            },
+            {
+                "unit": "Scavenger",
+                "synergy": "Zone control and punishment",
+                "strength": 0.7
+            }
+        ],
+        "formations": [
+            {
+                "units": [
+                    "Nutcase",
+                    "Headless",
+                    "Scavenger"
+                ],
+                "strategy": "Area denial and punish",
+                "effectiveness": 0.8
+            }
+        ]
+    }
+}

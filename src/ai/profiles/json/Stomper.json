@@ -1,0 +1,204 @@
+{
+    "id": 28,
+    "name": "Stomper",
+    "type": "P4",
+    "realm": "Pride",
+    "size": 2,
+    "comprehensiveEfficiency": 29,
+    "cost": 5,
+    "roles": {
+        "primary": "Tank",
+        "secondary": "Control",
+        "playstyle": "Defensive",
+        "AIReasoningPlaystyleContext": "Focuses on becoming increasingly durable through Tankish Build while controlling areas with strong zone control abilities"
+    },
+    "combatMetrics": {
+        "damageOutput": {
+            "burstPotential": 0.6,
+            "sustainedDamage": 0.5,
+            "areaEffect": 0.8,
+            "targetSelection": 0.7
+        },
+        "controlPower": {
+            "immobilization": 0.0,
+            "displacement": 0.0,
+            "debuffs": 0.0,
+            "zoneControl": 0.9
+        },
+        "survivability": {
+            "healthPool": 0.6,
+            "defensiveAbilities": 0.9,
+            "mobilityOptions": 0.4,
+            "recoveryPotential": 0.4
+        },
+        "utility": {
+            "resourceGeneration": 0.6,
+            "teamSupport": 0.4,
+            "mapControl": 0.8,
+            "comboEnablement": 0.5
+        }
+    },
+    "resourceProfile": {
+        "energyUsage": {
+            "optimal": 70,
+            "critical": 33,
+            "regeneration": 32
+        },
+        "enduranceManagement": {
+            "safeThreshold": 0.7,
+            "riskThreshold": 0.4,
+            "recoveryPriority": 0.7
+        }
+    },
+    "positioningProfile": {
+        "optimalRange": 3,
+        "formationPlacement": {
+            "frontline": 0.9,
+            "midline": 0.5,
+            "backline": 0.2
+        },
+        "zonePreferences": {
+            "center": 0.8,
+            "flank": 0.5,
+            "defensive": 0.7
+        }
+    },
+    "abilityProfile": {
+        "tankishBuild": {
+            "priority": 0.9,
+            "energyThreshold": 0,
+            "setupRequired": false,
+            "comboFollowup": [],
+            "comboPrecursor": [],
+            "conditions": {
+                "use": [
+                    "autoDefenseGain",
+                    "doubleStacksWhenNotDamaged",
+                    "defensivePosition"
+                ],
+                "avoid": [
+                    "unnecessaryDamage",
+                    "overextending"
+                ]
+            }
+        },
+        "seismicStomp": {
+            "priority": 0.8,
+            "energyThreshold": 31,
+            "setupRequired": true,
+            "comboFollowup": [
+                "stoneGrinder",
+                "earthShaker"
+            ],
+            "comboPrecursor": [],
+            "conditions": {
+                "use": [
+                    "priorityTargetsInRange",
+                    "energyAbove60"
+                ],
+                "avoid": [
+                    "criticalEnergy",
+                    "needAreaControl"
+                ]
+            }
+        },
+        "stoneGrinder": {
+            "priority": 0.7,
+            "energyThreshold": 32,
+            "setupRequired": true,
+            "comboFollowup": [
+                "earthShaker"
+            ],
+            "comboPrecursor": [
+                "seismicStomp"
+            ],
+            "conditions": {
+                "use": [
+                    "multipleEnemiesLined",
+                    "clearPath"
+                ],
+                "avoid": [
+                    "blockedPath",
+                    "needEnergyForEarthShaker"
+                ]
+            }
+        },
+        "earthShaker": {
+            "priority": 0.8,
+            "energyThreshold": 33,
+            "setupRequired": true,
+            "comboFollowup": [],
+            "comboPrecursor": [
+                "stoneGrinder",
+                "seismicStomp"
+            ],
+            "conditions": {
+                "use": [
+                    "delayMultipleEnemies",
+                    "controlImportantZones"
+                ],
+                "avoid": [
+                    "singleTargetPriority",
+                    "criticalEnergy"
+                ]
+            }
+        }
+    },
+    "matchupProfile": {
+        "strongAgainst": [
+            {
+                "type": "Physical Damage",
+                "reason": "High defense with Tankish Build",
+                "priority": 0.8
+            },
+            {
+                "type": "Groups",
+                "reason": "Strong area control abilities",
+                "priority": 0.9
+            }
+        ],
+        "weakAgainst": [
+            {
+                "type": "High Mobility",
+                "reason": "Can avoid area control",
+                "counterplay": [
+                    "use Earth Shaker to delay",
+                    "control key zones"
+                ]
+            },
+            {
+                "type": "Percentage Damage",
+                "reason": "Bypasses high defense",
+                "counterplay": [
+                    "focus on area control",
+                    "maintain safe positioning"
+                ]
+            }
+        ]
+    },
+    "synergyProfile": {
+        "pairs": [
+            {
+                "unit": "Area Damage Dealers",
+                "synergy": "Sets up with area control",
+                "strength": 0.8
+            },
+            {
+                "unit": "Single Target Damage",
+                "synergy": "Provides control while they deal damage",
+                "strength": 0.7
+            }
+        ],
+        "formations": [
+            {
+                "units": [
+                    "Stomper",
+                    "Ranged Damage",
+                    "Support"
+                ],
+                "strategy": "Stomper controls front while ranged deals damage",
+                "effectiveness": 0.8
+            }
+        ]
+    }
+}

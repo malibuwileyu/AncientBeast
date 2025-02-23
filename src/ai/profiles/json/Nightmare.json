@@ -1,0 +1,161 @@
+{
+    "id": 6,
+    "name": "Nightmare",
+    "type": "G6",
+    "realm": "Underworld",
+    "size": 2,
+    "comprehensiveEfficiency": 30,
+    "cost": 6,
+    "roles": {
+        "primary": "Damage",
+        "secondary": "Control",
+        "playstyle": "Aggressive",
+        "AIReasoningPlaystyleContext": "Excels at high burst damage and area control through fear mechanics"
+    },
+    "combatMetrics": {
+        "damageOutput": {
+            "burstPotential": 0.85,
+            "sustainedDamage": 0.7,
+            "areaEffect": 0.6,
+            "targetSelection": 0.75
+        },
+        "controlPower": {
+            "immobilization": 0.4,
+            "displacement": 0.3,
+            "debuffs": 0.7,
+            "zoneControl": 0.65
+        },
+        "survivability": {
+            "healthPool": 0.6,
+            "defensiveAbilities": 0.5,
+            "mobilityOptions": 0.7,
+            "recoveryPotential": 0.4
+        },
+        "utility": {
+            "resourceGeneration": 0.3,
+            "teamSupport": 0.2,
+            "mapControl": 0.6,
+            "comboEnablement": 0.5
+        }
+    },
+    "resourceProfile": {
+        "energyUsage": {
+            "optimal": 50,
+            "critical": 30,
+            "regeneration": 0.15
+        },
+        "enduranceManagement": {
+            "safeThreshold": 0.6,
+            "riskThreshold": 0.3,
+            "recoveryPriority": 0.4
+        }
+    },
+    "positioningProfile": {
+        "optimalRange": 4,
+        "formationPlacement": {
+            "frontline": 0.3,
+            "midline": 0.7,
+            "backline": 0.4
+        },
+        "zonePreferences": {
+            "center": 0.4,
+            "flank": 0.7,
+            "defensive": 0.3
+        }
+    },
+    "abilityProfile": {
+        "terrorize": {
+            "priority": 0.8,
+            "energyThreshold": 20,
+            "setupRequired": false,
+            "comboFollowup": [
+                "nightTerror"
+            ],
+            "comboPrecursor": [],
+            "conditions": {
+                "use": [
+                    "enemyGrouped",
+                    "lowHealth"
+                ],
+                "avoid": [
+                    "alreadyFeared"
+                ]
+            }
+        },
+        "nightTerror": {
+            "priority": 0.9,
+            "energyThreshold": 30,
+            "setupRequired": true,
+            "comboFollowup": [],
+            "comboPrecursor": [
+                "terrorize"
+            ],
+            "conditions": {
+                "use": [
+                    "enemyFeared",
+                    "clearPath"
+                ],
+                "avoid": [
+                    "lowEnergy"
+                ]
+            }
+        }
+    },
+    "matchupProfile": {
+        "strongAgainst": [
+            {
+                "type": "Support",
+                "reason": "Can easily isolate and eliminate",
+                "priority": 0.8
+            },
+            {
+                "type": "Ranged",
+                "reason": "Can close distance and pressure",
+                "priority": 0.7
+            }
+        ],
+        "weakAgainst": [
+            {
+                "type": "Tank",
+                "reason": "Difficult to burst down",
+                "counterplay": [
+                    "focus on squishier targets",
+                    "use fear for control"
+                ]
+            },
+            {
+                "type": "Heavy Control",
+                "reason": "Can be locked down before combo execution",
+                "counterplay": [
+                    "bait out control abilities",
+                    "wait for openings"
+                ]
+            }
+        ]
+    },
+    "synergyProfile": {
+        "pairs": [
+            {
+                "unit": "Dark Priest",
+                "synergy": "Fear amplification and follow-up",
+                "strength": 0.8
+            },
+            {
+                "unit": "Headless",
+                "synergy": "Combo potential with fear effects",
+                "strength": 0.7
+            }
+        ],
+        "formations": [
+            {
+                "units": [
+                    "Nightmare",
+                    "Dark Priest",
+                    "Headless"
+                ],
+                "strategy": "Fear-based control and burst",
+                "effectiveness": 0.85
+            }
+        ]
+    }
+}

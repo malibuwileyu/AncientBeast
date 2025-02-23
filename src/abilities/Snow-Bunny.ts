@@ -5,7 +5,7 @@ import * as matrices from '../utility/matrices';
 import * as arrayUtils from '../utility/arrayUtils';
 import Game from '../game';
 import { Hex } from '../utility/hex';
-import { Point, getPointFacade } from '../utility/pointfacade';
+import { Point } from '../utility/pointfacade';
 
 /* TODO:
  * Refactor to remove the `arguments` keyword
@@ -22,6 +22,11 @@ const HopTriggerDirections = {
  * @return {void}
  */
 export default (G: Game) => {
+	// Initialize abilities array if needed
+	if (!G.abilities[12]) {
+		G.abilities[12] = [];
+	}
+
 	G.abilities[12] = [
 		/**
 		 * First Ability: Bunny Hop
@@ -54,7 +59,7 @@ export default (G: Game) => {
 				if (this.creature === this.game.activeCreature) {
 					return false;
 				}
-				const creatureOnHex = getPointFacade().getCreaturesAt({ x: hex.x, y: hex.y })[0];
+				const creatureOnHex = G.grid.hexes[hex.y][hex.x].creature;
 
 				// Double check the destination hex actually contains a creature.
 				if (creatureOnHex == undefined) {
@@ -197,7 +202,7 @@ export default (G: Game) => {
 				const hexesInFront = this.creature.getHexMap(matrices.front1hex, false);
 				const hexesWithEnemy = hexesInFront.reduce(
 					(acc: { direction: number; hex: Hex; enemyPos: Point }[], curr, idx) => {
-						const creatureOnHex = getPointFacade().getCreaturesAt({ x: curr.x, y: curr.y })[0];
+						const creatureOnHex = G.grid.hexes[curr.y][curr.x].creature;
 						const hexHasEnemy = creatureOnHex && isTeam(creatureOnHex, this.creature, Team.Enemy);
 
 						if (hexHasEnemy) {
@@ -208,7 +213,7 @@ export default (G: Game) => {
 								// The display hex.
 								hex: curr,
 								// The creature position.
-								enemyPos: creatureOnHex.pos,
+								enemyPos: { x: creatureOnHex.x, y: creatureOnHex.y }
 							});
 						}
 
@@ -343,11 +348,11 @@ export default (G: Game) => {
 				ability.end();
 
 				const hexWithTarget = path.find((hex: Hex) => {
-					const creature = getPointFacade().getCreaturesAt({ x: hex.x, y: hex.y })[0];
+					const creature = G.grid.hexes[hex.y][hex.x].creature;
 					return creature && creature != this.creature;
 				});
 
-				const target = getPointFacade().getCreaturesAt(hexWithTarget.x, hexWithTarget.y)[0];
+				const target = G.grid.hexes[hexWithTarget.y][hexWithTarget.x].creature;
 
 				// No blow size penalty if upgraded and target is frozen
 				const dist = 5 - (this.isUpgraded() && target.isFrozen() ? 0 : target.size);
@@ -464,11 +469,11 @@ export default (G: Game) => {
 				G.Phaser.camera.shake(0.01, 90, true, G.Phaser.camera.SHAKE_HORIZONTAL, true);
 
 				const hexWithTarget = path.find((hex: Hex) => {
-					const creature = getPointFacade().getCreaturesAt({ x: hex.x, y: hex.y })[0];
+					const creature = G.grid.hexes[hex.y][hex.x].creature;
 					return creature && creature != this.creature;
 				});
 
-				const target = getPointFacade().getCreaturesAt(hexWithTarget.x, hexWithTarget.y)[0];
+				const target = G.grid.hexes[hexWithTarget.y][hexWithTarget.x].creature;
 
 				const projectileInstance = G.animations.projectile(
 					// @ts-expect-error `this.creature` exists once this file is extended into `ability.ts`

@@ -29,7 +29,7 @@ import { Drop } from './drop';
 import { CreatureType, Realm, UnitData } from './data/types';
 import { MetricsManager } from './metrics/MetricsManager';
 import { StateCapture } from './metrics/StateCapture';
-import { ThreatAnalyticsManager } from './metrics/analysis/ThreatAnalyticsManager';
+import { ThreatAnalyticsManager } from './metrics/analysis';
 
 /* eslint-disable prefer-rest-params */
 
@@ -157,7 +157,10 @@ export default class Game {
 	threatAnalyticsManager: ThreatAnalyticsManager;
 
 	constructor() {
+		// Initialize abilities array
 		this.abilities = [];
+		
+		// Initialize other arrays
 		this.players = [];
 		this.creatures = [];
 		this.traps = [];
@@ -278,9 +281,35 @@ export default class Game {
 		const signalChannels = ['ui', 'metaPowers', 'creature', 'hex'];
 		this.signals = this.setupSignalChannels(signalChannels);
 
+		// Initialize metrics systems
 		this.metricsManager = new MetricsManager();
 		this.stateCapture = new StateCapture(this);
-		this.threatAnalyticsManager = new ThreatAnalyticsManager(this);
+
+		// Initialize ThreatAnalyticsManager last, after all game properties are set up
+		try {
+			console.log('[Game] Creating ThreatAnalyticsManager...');
+			console.log('[Game] Game instance state:', {
+				gameState: this.gameState,
+				turn: this.turn,
+				creatures: this.creatures.length
+			});
+			
+			this.threatAnalyticsManager = new ThreatAnalyticsManager(this);
+			console.log('[Game] ThreatAnalyticsManager instance created:', this.threatAnalyticsManager);
+			console.log('[Game] ThreatAnalyticsManager initialize method:', this.threatAnalyticsManager?.initialize);
+			console.log('[Game] ThreatAnalyticsManager prototype:', Object.getPrototypeOf(this.threatAnalyticsManager));
+			console.log('[Game] ThreatAnalyticsManager methods:', Object.getOwnPropertyNames(Object.getPrototypeOf(this.threatAnalyticsManager)));
+			
+			if (!this.threatAnalyticsManager || typeof this.threatAnalyticsManager.initialize !== 'function') {
+				console.error('[Game] ThreatAnalyticsManager initialize is not a function!');
+				console.error('[Game] Initialize type:', typeof this.threatAnalyticsManager?.initialize);
+				console.error('[Game] Initialize value:', this.threatAnalyticsManager?.initialize);
+				throw new Error('ThreatAnalyticsManager failed to initialize properly');
+			}
+		} catch (error) {
+			console.error('[Game] Error creating ThreatAnalyticsManager:', error);
+			console.error('[Game] ThreatAnalyticsManager state:', this.threatAnalyticsManager);
+		}
 	}
 
 	loadUnitData(data: UnitData) {
@@ -479,6 +508,33 @@ export default class Game {
 		console.log(`Game ID: ${gameId}`);
 		console.log('=========================');
 		this.metricsManager.initializeGame(gameId);
+
+		// Verify ThreatAnalyticsManager before calling initialize
+		console.log('[Game] Checking ThreatAnalyticsManager before initialize...');
+		console.log('[Game] ThreatAnalyticsManager instance:', this.threatAnalyticsManager);
+		console.log('[Game] Initialize method:', this.threatAnalyticsManager?.initialize);
+		console.log('[Game] Initialize method type:', typeof this.threatAnalyticsManager?.initialize);
+		
+		if (!this.threatAnalyticsManager) {
+			console.error('[Game] ThreatAnalyticsManager is not initialized!');
+			// Try to reinitialize
+			try {
+				console.log('[Game] Attempting to reinitialize ThreatAnalyticsManager...');
+				this.threatAnalyticsManager = new ThreatAnalyticsManager(this);
+				console.log('[Game] Reinitialization successful');
+			} catch (error) {
+				console.error('[Game] Failed to reinitialize ThreatAnalyticsManager:', error);
+			}
+		}
+
+		if (typeof this.threatAnalyticsManager?.initialize !== 'function') {
+			console.error('[Game] ThreatAnalyticsManager initialize is not a function!');
+			console.error('[Game] Initialize type:', typeof this.threatAnalyticsManager?.initialize);
+			console.error('[Game] ThreatAnalyticsManager methods:', Object.getOwnPropertyNames(Object.getPrototypeOf(this.threatAnalyticsManager)));
+		} else {
+			console.log('[Game] Calling ThreatAnalyticsManager initialize...');
+			this.threatAnalyticsManager.initialize(gameId);
+		}
 
 		// Phaser
 		this.Phaser.scale.parentIsWindow = true;
@@ -1154,13 +1210,13 @@ export default class Game {
 
 		for (let i = totalCreatures - 1; i >= 0; i--) {
 			if (
-				//@ts-expect-error 2339 `type` does not exist on units in `units.ts`
+				//removed ts-expect-error 2339 `type` does not exist on units in `units.ts`
 				this.creatureData[i].type == type ||
 				this.creatureData[i].realm + this.creatureData[i].level == type
 			) {
-				//@ts-expect-error 2339
+				//removed ts-expect-error 2339
 				if (!this.creatureData[i].type) {
-					//@ts-expect-error 2339
+					//removed ts-expect-error 2339
 					// When type property is missing, create it using formula: concat(realm + level)
 					this.creatureData[i].type = this.creatureData[i].realm + this.creatureData[i].level;
 				}
